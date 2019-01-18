@@ -2,12 +2,12 @@ import 'package:boardview/board_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-typedef void OnDropItem(int list_index, int item_index, BoardItemState state);
-typedef void OnTapItem(int list_index, int item_index, BoardItemState state);
+typedef void OnDropItem(int listIndex, int itemIndex, BoardItemState state);
+typedef void OnTapItem(int listIndex, int itemIndex, BoardItemState state);
 typedef void OnStartDragItem(
-    int list_index, int item_index, BoardItemState state);
-typedef void OnDragItem(int old_list_index, int old_item_index,
-    int new_list_index, int new_item_index, BoardItemState state);
+    int listIndex, int itemIndex, BoardItemState state);
+typedef void OnDragItem(int oldListIndex, int oldItemIndex,
+    int newListIndex, int newItemIndex, BoardItemState state);
 
 class BoardItem extends StatefulWidget {
   final BoardListState boardList;
@@ -41,26 +41,26 @@ class BoardItemState extends State<BoardItem> {
   double height;
   double width;
 
-  void on_drop_item(int list_index, int item_index) {
-    widget.boardList.widget.boardView.list_states[list_index].setState(() {
+  void onDropItem(int listIndex, int itemIndex) {
+    widget.boardList.widget.boardView.listStates[listIndex].setState(() {
       if (widget.onDropItem != null) {
-        widget.onDropItem(list_index, item_index, this);
+        widget.onDropItem(listIndex, itemIndex, this);
       }
-      widget.boardList.widget.boardView.dragged_item_index = null;
-      widget.boardList.widget.boardView.dragged_list_index = null;
+      widget.boardList.widget.boardView.draggedItemIndex = null;
+      widget.boardList.widget.boardView.draggedListIndex = null;
     });
   }
 
-  void _StartDrag(Widget item, BuildContext context) {
+  void _startDrag(Widget item, BuildContext context) {
     if (widget.boardList.widget.boardView != null) {
       widget.boardList.widget.boardView.setState(() {
-        widget.boardList.widget.boardView.dragged_item_index = widget.index;
+        widget.boardList.widget.boardView.draggedItemIndex = widget.index;
         widget.boardList.widget.boardView.height = context.size.height;
-        widget.boardList.widget.boardView.dragged_list_index =
+        widget.boardList.widget.boardView.draggedListIndex =
             widget.boardList.widget.index;
-        widget.boardList.widget.boardView.dragged_item = item;
+        widget.boardList.widget.boardView.draggedItem = item;
         widget.boardList.setState(() {
-          widget.boardList.widget.boardView.on_drop_item = on_drop_item;
+          widget.boardList.widget.boardView.onDropItem = onDropItem;
         });
         if (widget.onStartDragItem != null) {
           widget.onStartDragItem(
@@ -72,7 +72,6 @@ class BoardItemState extends State<BoardItem> {
     }
   }
 
-  @override
   void afterFirstLayout(BuildContext context) {
     height = context.size.height;
     width = context.size.width;
@@ -82,26 +81,25 @@ class BoardItemState extends State<BoardItem> {
   Widget build(BuildContext context) {
     WidgetsBinding.instance
         .addPostFrameCallback((_) => afterFirstLayout(context));
-    if(widget.boardList.item_states.length > widget.index) {
-      widget.boardList.item_states.removeAt(widget.index);
+    if(widget.boardList.itemStates.length > widget.index) {
+      widget.boardList.itemStates.removeAt(widget.index);
     }
-    widget.boardList.item_states.insert(widget.index, this);
+    widget.boardList.itemStates.insert(widget.index, this);
     return GestureDetector(
       onTapDown: (otd) {
         RenderBox object = context.findRenderObject();
         Offset pos = object.localToGlobal(Offset.zero);
         RenderBox box = widget.boardList.context.findRenderObject();
-        Offset list_pos = box.localToGlobal(Offset.zero);
-        Offset pos2 = object.globalToLocal(otd.globalPosition);
-        widget.boardList.widget.boardView.left_list_x = list_pos.dx;
-        widget.boardList.widget.boardView.top_list_y = list_pos.dy;
-        widget.boardList.widget.boardView.top_item_y = pos.dy;
-        widget.boardList.widget.boardView.bottom_item_y = pos.dy+object.size.height;
-        widget.boardList.widget.boardView.bottom_list_y = list_pos.dy+box.size.height;
-        widget.boardList.widget.boardView.right_list_x = list_pos.dx+box.size.width;
+        Offset listPos = box.localToGlobal(Offset.zero);
+        widget.boardList.widget.boardView.leftListX = listPos.dx;
+        widget.boardList.widget.boardView.topListY = listPos.dy;
+        widget.boardList.widget.boardView.topItemY = pos.dy;
+        widget.boardList.widget.boardView.bottomItemY = pos.dy+object.size.height;
+        widget.boardList.widget.boardView.bottomListY = listPos.dy+box.size.height;
+        widget.boardList.widget.boardView.rightListX = listPos.dx+box.size.width;
 
-        widget.boardList.widget.boardView.initial_x = pos.dx;
-        widget.boardList.widget.boardView.initial_y = pos.dy;
+        widget.boardList.widget.boardView.initialX = pos.dx;
+        widget.boardList.widget.boardView.initialY = pos.dy;
       },
       onTapCancel: () {},
       onTap: () {
@@ -110,7 +108,7 @@ class BoardItemState extends State<BoardItem> {
         }
       },
       onLongPress: () {
-        _StartDrag(widget, context);
+        _startDrag(widget, context);
       },
       child: widget.item,
     );

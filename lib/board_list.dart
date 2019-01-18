@@ -31,24 +31,24 @@ class BoardList extends StatefulWidget {
 }
 
 class BoardListState extends State<BoardList> {
-  List<BoardItemState> item_states = List<BoardItemState>();
+  List<BoardItemState> itemStates = List<BoardItemState>();
   ScrollController boardListController = new ScrollController();
 
 
-  void on_drop_list(int list_index) {
+  void onDropList(int listIndex) {
     widget.boardView.setState(() {
-      widget.boardView.dragged_list_index = null;
+      widget.boardView.draggedListIndex = null;
     });
   }
 
-  void _StartDrag(Widget item, BuildContext context) {
+  void _startDrag(Widget item, BuildContext context) {
     if (widget.boardView != null) {
       widget.boardView.setState(() {
         widget.boardView.height = context.size.height;
-        widget.boardView.dragged_list_index = widget.index;
-        widget.boardView.dragged_item_index = null;
-        widget.boardView.dragged_item = item;
-        widget.boardView.on_drop_list = on_drop_list;
+        widget.boardView.draggedListIndex = widget.index;
+        widget.boardView.draggedItemIndex = null;
+        widget.boardView.draggedItem = item;
+        widget.boardView.onDropList = onDropList;
       });
     } else {
       print("BoardView is null");
@@ -57,25 +57,25 @@ class BoardListState extends State<BoardList> {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> list_widgets = new List<Widget>();
+    List<Widget> listWidgets = new List<Widget>();
     if (widget.header != null) {
       Color headerBackgroundColor = Color.fromARGB(255, 255, 255, 255);
       if (widget.headerBackgroundColor != null) {
         headerBackgroundColor = widget.headerBackgroundColor;
       }
-      list_widgets.add(GestureDetector(
+      listWidgets.add(GestureDetector(
         onTapDown: (otd) {
           RenderBox object = context.findRenderObject();
           Offset pos = object.localToGlobal(Offset.zero);
-          widget.boardView.initial_x = pos.dx;
-          widget.boardView.initial_y = pos.dy;
+          widget.boardView.initialX = pos.dx;
+          widget.boardView.initialY = pos.dy;
 
-          widget.boardView.right_list_x = pos.dx+object.size.width;
-          widget.boardView.left_list_x = pos.dx;
+          widget.boardView.rightListX = pos.dx+object.size.width;
+          widget.boardView.leftListX = pos.dx;
         },
         onTapCancel: () {},
         onLongPress: () {
-          _StartDrag(widget, context);
+          _startDrag(widget, context);
         },
         child: Container(
           color: headerBackgroundColor,
@@ -90,7 +90,7 @@ class BoardListState extends State<BoardList> {
     }
 
     if (widget.items != null) {
-      list_widgets.add(Container(
+      listWidgets.add(Container(
           child: Flexible(
               fit: FlexFit.loose,
               child: new ListView.builder(
@@ -112,7 +112,7 @@ class BoardListState extends State<BoardList> {
                       onStartDragItem: widget.items[index].onStartDragItem,
                     );
                   }
-                  if (widget.boardView.dragged_item_index == index && widget.boardView.dragged_list_index == widget.index) {
+                  if (widget.boardView.draggedItemIndex == index && widget.boardView.draggedListIndex == widget.index) {
                     return Opacity(
                       opacity: 0.0,
                       child: widget.items[index],
@@ -125,7 +125,7 @@ class BoardListState extends State<BoardList> {
     }
 
     if (widget.footer != null) {
-      list_widgets.add(widget.footer);
+      listWidgets.add(widget.footer);
     }
 
     Color backgroundColor = Color.fromARGB(255, 255, 255, 255);
@@ -133,10 +133,10 @@ class BoardListState extends State<BoardList> {
     if (widget.backgroundColor != null) {
       backgroundColor = widget.backgroundColor;
     }
-    if(widget.boardView.list_states.length > widget.index) {
-      widget.boardView.list_states.removeAt(widget.index);
+    if(widget.boardView.listStates.length > widget.index) {
+      widget.boardView.listStates.removeAt(widget.index);
     }
-    widget.boardView.list_states.insert(widget.index, this);
+    widget.boardView.listStates.insert(widget.index, this);
 
     return Container(
         margin: EdgeInsets.all(8),
@@ -144,7 +144,7 @@ class BoardListState extends State<BoardList> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.start,
-          children: list_widgets,
+          children: listWidgets,
         ));
   }
 }
