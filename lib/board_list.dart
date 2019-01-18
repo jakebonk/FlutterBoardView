@@ -34,7 +34,6 @@ class BoardListState extends State<BoardList> {
   List<BoardItemState> itemStates = List<BoardItemState>();
   ScrollController boardListController = new ScrollController();
 
-
   void onDropList(int listIndex) {
     widget.boardView.setState(() {
       widget.boardView.draggedListIndex = null;
@@ -70,7 +69,7 @@ class BoardListState extends State<BoardList> {
           widget.boardView.initialX = pos.dx;
           widget.boardView.initialY = pos.dy;
 
-          widget.boardView.rightListX = pos.dx+object.size.width;
+          widget.boardView.rightListX = pos.dx + object.size.width;
           widget.boardView.leftListX = pos.dx;
         },
         onTapCancel: () {},
@@ -112,7 +111,8 @@ class BoardListState extends State<BoardList> {
                       onStartDragItem: widget.items[index].onStartDragItem,
                     );
                   }
-                  if (widget.boardView.draggedItemIndex == index && widget.boardView.draggedListIndex == widget.index) {
+                  if (widget.boardView.draggedItemIndex == index &&
+                      widget.boardView.draggedListIndex == widget.index) {
                     return Opacity(
                       opacity: 0.0,
                       child: widget.items[index],
@@ -133,7 +133,7 @@ class BoardListState extends State<BoardList> {
     if (widget.backgroundColor != null) {
       backgroundColor = widget.backgroundColor;
     }
-    if(widget.boardView.listStates.length > widget.index) {
+    if (widget.boardView.listStates.length > widget.index) {
       widget.boardView.listStates.removeAt(widget.index);
     }
     widget.boardView.listStates.insert(widget.index, this);

@@ -18,8 +18,8 @@ class BoardView extends StatefulWidget {
   }
 }
 
-typedef void OnDropItem(int list_index, int item_index);
-typedef void OnDropList(int list_index);
+typedef void OnDropItem(int listIndex, int itemIndex);
+typedef void OnDropList(int listIndex);
 
 class BoardViewState extends State<BoardView> {
   Widget draggedItem;
@@ -53,14 +53,13 @@ class BoardViewState extends State<BoardView> {
 
   void moveDown() {
     listStates[draggedListIndex].setState(() {
-      topItemY += listStates[draggedListIndex]
-          .itemStates[draggedItemIndex+1].height;
-      bottomItemY += listStates[draggedListIndex]
-          .itemStates[draggedItemIndex+1].height;
+      topItemY +=
+          listStates[draggedListIndex].itemStates[draggedItemIndex + 1].height;
+      bottomItemY +=
+          listStates[draggedListIndex].itemStates[draggedItemIndex + 1].height;
       var item = widget.lists[draggedListIndex].items[draggedItemIndex];
       widget.lists[draggedListIndex].items.removeAt(draggedItemIndex);
-      var itemState =
-          listStates[draggedListIndex].itemStates[draggedItemIndex];
+      var itemState = listStates[draggedListIndex].itemStates[draggedItemIndex];
       listStates[draggedListIndex].itemStates.removeAt(draggedItemIndex);
       widget.lists[draggedListIndex].items.insert(++draggedItemIndex, item);
       listStates[draggedListIndex]
@@ -71,14 +70,13 @@ class BoardViewState extends State<BoardView> {
 
   void moveUp() {
     listStates[draggedListIndex].setState(() {
-      topItemY -= listStates[draggedListIndex]
-          .itemStates[draggedItemIndex-1].height;
-      bottomItemY -= listStates[draggedListIndex]
-          .itemStates[draggedItemIndex-1].height;
+      topItemY -=
+          listStates[draggedListIndex].itemStates[draggedItemIndex - 1].height;
+      bottomItemY -=
+          listStates[draggedListIndex].itemStates[draggedItemIndex - 1].height;
       var item = widget.lists[draggedListIndex].items[draggedItemIndex];
       widget.lists[draggedListIndex].items.removeAt(draggedItemIndex);
-      var itemState =
-          listStates[draggedListIndex].itemStates[draggedItemIndex];
+      var itemState = listStates[draggedListIndex].itemStates[draggedItemIndex];
       listStates[draggedListIndex].itemStates.removeAt(draggedItemIndex);
       widget.lists[draggedListIndex].items.insert(--draggedItemIndex, item);
       listStates[draggedListIndex]
@@ -87,24 +85,24 @@ class BoardViewState extends State<BoardView> {
     });
   }
 
-  void moveListRight(){
+  void moveListRight() {
     setState(() {
       var list = widget.lists[draggedListIndex];
-      var list_state = listStates[draggedListIndex];
+      var listState = listStates[draggedListIndex];
       widget.lists.removeAt(draggedListIndex);
       listStates.removeAt(draggedListIndex);
       draggedListIndex++;
       widget.lists.insert(draggedListIndex, list);
-      listStates.insert(draggedListIndex, list_state);
+      listStates.insert(draggedListIndex, listState);
       canDrag = false;
       if (_boardViewController != null && _boardViewController.hasClients) {
         int tempListIndex = draggedListIndex;
         _boardViewController
             .animateTo(draggedListIndex * width,
-            duration: new Duration(milliseconds: 400), curve: Curves.ease)
+                duration: new Duration(milliseconds: 400), curve: Curves.ease)
             .whenComplete(() {
           RenderBox object =
-          listStates[tempListIndex].context.findRenderObject();
+              listStates[tempListIndex].context.findRenderObject();
           Offset pos = object.localToGlobal(Offset.zero);
           leftListX = pos.dx;
           rightListX = pos.dx + object.size.width;
@@ -119,13 +117,10 @@ class BoardViewState extends State<BoardView> {
   void moveRight() {
     setState(() {
       var item = widget.lists[draggedListIndex].items[draggedItemIndex];
-      var itemState =
-          listStates[draggedListIndex].itemStates[draggedItemIndex];
+      var itemState = listStates[draggedListIndex].itemStates[draggedItemIndex];
       listStates[draggedListIndex].setState(() {
         widget.lists[draggedListIndex].items.removeAt(draggedItemIndex);
-        listStates[draggedListIndex]
-            .itemStates
-            .removeAt(draggedItemIndex);
+        listStates[draggedListIndex].itemStates.removeAt(draggedItemIndex);
       });
       draggedListIndex++;
       listStates[draggedListIndex].setState(() {
@@ -165,8 +160,10 @@ class BoardViewState extends State<BoardView> {
           Offset pos = object.localToGlobal(Offset.zero);
           leftListX = pos.dx;
           rightListX = pos.dx + object.size.width;
-          RenderBox box =
-          listStates[tempListIndex].itemStates[tempItemIndex].context.findRenderObject();
+          RenderBox box = listStates[tempListIndex]
+              .itemStates[tempItemIndex]
+              .context
+              .findRenderObject();
           Offset itemPos = box.localToGlobal(Offset.zero);
           topItemY = itemPos.dy;
           bottomItemY = itemPos.dy + box.size.height;
@@ -178,7 +175,7 @@ class BoardViewState extends State<BoardView> {
     });
   }
 
-  void moveListLeft(){
+  void moveListLeft() {
     setState(() {
       var list = widget.lists[draggedListIndex];
       var listState = listStates[draggedListIndex];
@@ -192,10 +189,10 @@ class BoardViewState extends State<BoardView> {
         int tempListIndex = draggedListIndex;
         _boardViewController
             .animateTo(draggedListIndex * width,
-            duration: new Duration(milliseconds: 400), curve: Curves.ease)
+                duration: new Duration(milliseconds: 400), curve: Curves.ease)
             .whenComplete(() {
           RenderBox object =
-          listStates[tempListIndex].context.findRenderObject();
+              listStates[tempListIndex].context.findRenderObject();
           Offset pos = object.localToGlobal(Offset.zero);
           leftListX = pos.dx;
           rightListX = pos.dx + object.size.width;
@@ -210,13 +207,10 @@ class BoardViewState extends State<BoardView> {
   void moveLeft() {
     setState(() {
       var item = widget.lists[draggedListIndex].items[draggedItemIndex];
-      var itemState =
-          listStates[draggedListIndex].itemStates[draggedItemIndex];
+      var itemState = listStates[draggedListIndex].itemStates[draggedItemIndex];
       listStates[draggedListIndex].setState(() {
         widget.lists[draggedListIndex].items.removeAt(draggedItemIndex);
-        listStates[draggedListIndex]
-            .itemStates
-            .removeAt(draggedItemIndex);
+        listStates[draggedListIndex].itemStates.removeAt(draggedItemIndex);
       });
       draggedListIndex--;
       listStates[draggedListIndex].setState(() {
@@ -256,8 +250,10 @@ class BoardViewState extends State<BoardView> {
           Offset pos = object.localToGlobal(Offset.zero);
           leftListX = pos.dx;
           rightListX = pos.dx + object.size.width;
-          RenderBox box =
-          listStates[tempListIndex].itemStates[tempItemIndex].context.findRenderObject();
+          RenderBox box = listStates[tempListIndex]
+              .itemStates[tempItemIndex]
+              .context
+              .findRenderObject();
           Offset itemPos = box.localToGlobal(Offset.zero);
           topItemY = itemPos.dy;
           bottomItemY = itemPos.dy + box.size.height;
@@ -328,7 +324,10 @@ class BoardViewState extends State<BoardView> {
         height != null &&
         width != null) {
       if (canDrag && dxInit != null && dyInit != null) {
-        if (draggedItemIndex != null && draggedItem != null && topItemY != null && bottomItemY != null) {
+        if (draggedItemIndex != null &&
+            draggedItem != null &&
+            topItemY != null &&
+            bottomItemY != null) {
           //dragging item
           if (0 <= draggedListIndex - 1 && dx < leftListX + 45) {
             //scroll left
@@ -355,7 +354,7 @@ class BoardViewState extends State<BoardView> {
                   duration: new Duration(milliseconds: 10),
                   curve: Curves.ease);
               RenderBox object =
-              listStates[draggedListIndex].context.findRenderObject();
+                  listStates[draggedListIndex].context.findRenderObject();
               Offset pos = object.localToGlobal(Offset.zero);
               leftListX = pos.dx;
               rightListX = pos.dx + object.size.width;
@@ -365,18 +364,20 @@ class BoardViewState extends State<BoardView> {
             //move left
             moveLeft();
           }
-          if (widget.lists.length > draggedListIndex + 1 &&
-              dx > rightListX) {
+          if (widget.lists.length > draggedListIndex + 1 && dx > rightListX) {
             //move right
             moveRight();
           }
-          if (0 <= draggedItemIndex - 1 &&
-              dy < topListY + 70){
+          if (0 <= draggedItemIndex - 1 && dy < topListY + 70) {
             //scroll up
             if (listStates[draggedListIndex].boardListController != null &&
                 listStates[draggedListIndex].boardListController.hasClients) {
               listStates[draggedListIndex].boardListController.animateTo(
-                  listStates[draggedListIndex].boardListController.position.pixels - 5,
+                  listStates[draggedListIndex]
+                          .boardListController
+                          .position
+                          .pixels -
+                      5,
                   duration: new Duration(milliseconds: 10),
                   curve: Curves.ease);
               topItemY += 5;
@@ -394,13 +395,17 @@ class BoardViewState extends State<BoardView> {
             moveUp();
           }
           if (widget.lists[draggedListIndex].items.length >
-              draggedItemIndex + 1 &&
-              dy > bottomListY - 70){
+                  draggedItemIndex + 1 &&
+              dy > bottomListY - 70) {
             //scroll down
             if (listStates[draggedListIndex].boardListController != null &&
                 listStates[draggedListIndex].boardListController.hasClients) {
               listStates[draggedListIndex].boardListController.animateTo(
-                  listStates[draggedListIndex].boardListController.position.pixels + 5,
+                  listStates[draggedListIndex]
+                          .boardListController
+                          .position
+                          .pixels +
+                      5,
                   duration: new Duration(milliseconds: 10),
                   curve: Curves.ease);
               topItemY -= 5;
@@ -446,8 +451,7 @@ class BoardViewState extends State<BoardView> {
               rightListX -= 5;
             }
           }
-          if (widget.lists.length > draggedListIndex + 1 &&
-              dx  > rightListX) {
+          if (widget.lists.length > draggedListIndex + 1 && dx > rightListX) {
             //move right
             moveListRight();
           }
@@ -456,7 +460,6 @@ class BoardViewState extends State<BoardView> {
             moveListLeft();
           }
         }
-
       }
       stackWidgets.add(Positioned(
         width: width,

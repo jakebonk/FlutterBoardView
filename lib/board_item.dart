@@ -6,8 +6,8 @@ typedef void OnDropItem(int listIndex, int itemIndex, BoardItemState state);
 typedef void OnTapItem(int listIndex, int itemIndex, BoardItemState state);
 typedef void OnStartDragItem(
     int listIndex, int itemIndex, BoardItemState state);
-typedef void OnDragItem(int oldListIndex, int oldItemIndex,
-    int newListIndex, int newItemIndex, BoardItemState state);
+typedef void OnDragItem(int oldListIndex, int oldItemIndex, int newListIndex,
+    int newItemIndex, BoardItemState state);
 
 class BoardItem extends StatefulWidget {
   final BoardListState boardList;
@@ -81,7 +81,7 @@ class BoardItemState extends State<BoardItem> {
   Widget build(BuildContext context) {
     WidgetsBinding.instance
         .addPostFrameCallback((_) => afterFirstLayout(context));
-    if(widget.boardList.itemStates.length > widget.index) {
+    if (widget.boardList.itemStates.length > widget.index) {
       widget.boardList.itemStates.removeAt(widget.index);
     }
     widget.boardList.itemStates.insert(widget.index, this);
@@ -94,9 +94,12 @@ class BoardItemState extends State<BoardItem> {
         widget.boardList.widget.boardView.leftListX = listPos.dx;
         widget.boardList.widget.boardView.topListY = listPos.dy;
         widget.boardList.widget.boardView.topItemY = pos.dy;
-        widget.boardList.widget.boardView.bottomItemY = pos.dy+object.size.height;
-        widget.boardList.widget.boardView.bottomListY = listPos.dy+box.size.height;
-        widget.boardList.widget.boardView.rightListX = listPos.dx+box.size.width;
+        widget.boardList.widget.boardView.bottomItemY =
+            pos.dy + object.size.height;
+        widget.boardList.widget.boardView.bottomListY =
+            listPos.dy + box.size.height;
+        widget.boardList.widget.boardView.rightListX =
+            listPos.dx + box.size.width;
 
         widget.boardList.widget.boardView.initialX = pos.dx;
         widget.boardList.widget.boardView.initialY = pos.dy;
