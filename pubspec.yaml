@@ -1,0 +1,18 @@
+name: boardview
+description: A new Flutter package to create a BoardView
+version: 0.0.1
+author: Jacob Bonk <jakebonk@gmail.com>
+homepage: https://github.com/jakebonk/FlutterBoardView
+
+environment:
+  sdk: ">=2.0.0-dev.68.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
