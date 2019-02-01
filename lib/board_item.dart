@@ -17,7 +17,6 @@ class BoardItem extends StatefulWidget {
   final OnTapItem onTapItem;
   final OnStartDragItem onStartDragItem;
   final OnDragItem onDragItem;
-  final String test;
 
   const BoardItem(
       {Key key,
@@ -27,7 +26,6 @@ class BoardItem extends StatefulWidget {
       this.onDropItem,
       this.onTapItem,
       this.onStartDragItem,
-      this.test,
       this.onDragItem})
       : super(key: key);
 

@@ -125,6 +125,7 @@ class BoardViewState extends State<BoardView> {
       draggedListIndex++;
       listStates[draggedListIndex].setState(() {
         double closestValue = 10000;
+        draggedItemIndex = 0;
         for (int i = 0;
             i < listStates[draggedListIndex].itemStates.length;
             i++) {
@@ -215,6 +216,7 @@ class BoardViewState extends State<BoardView> {
       draggedListIndex--;
       listStates[draggedListIndex].setState(() {
         double closestValue = 10000;
+        draggedItemIndex = 0;
         for (int i = 0;
             i < listStates[draggedListIndex].itemStates.length;
             i++) {
@@ -261,8 +263,6 @@ class BoardViewState extends State<BoardView> {
             canDrag = true;
           });
         });
-      } else {
-        print("eh");
       }
     });
   }
@@ -368,7 +368,7 @@ class BoardViewState extends State<BoardView> {
             //move right
             moveRight();
           }
-          if (0 <= draggedItemIndex - 1 && dy < topListY + 70) {
+          if (dy < topListY + 70) {
             //scroll up
             if (listStates[draggedListIndex].boardListController != null &&
                 listStates[draggedListIndex].boardListController.hasClients) {
@@ -394,9 +394,7 @@ class BoardViewState extends State<BoardView> {
             //move up
             moveUp();
           }
-          if (widget.lists[draggedListIndex].items.length >
-                  draggedItemIndex + 1 &&
-              dy > bottomListY - 70) {
+          if (dy > bottomListY - 70) {
             //scroll down
             if (listStates[draggedListIndex].boardListController != null &&
                 listStates[draggedListIndex].boardListController.hasClients) {

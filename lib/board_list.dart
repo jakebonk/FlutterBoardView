@@ -84,8 +84,8 @@ class BoardListState extends State<BoardList> {
               children: <Widget>[
                 widget.header,
               ]),
-        ),
-      ));
+        )));
+
     }
 
     if (widget.items != null) {
@@ -99,11 +99,11 @@ class BoardListState extends State<BoardList> {
                 itemBuilder: (ctx, index) {
                   if (widget.items[index].boardList == null ||
                       widget.items[index].index != index ||
+                      widget.items[index].boardList.widget.index != widget.index ||
                       widget.items[index].boardList != this) {
                     widget.items[index] = new BoardItem(
                       boardList: this,
                       item: widget.items[index].item,
-                      test: widget.items[index].test,
                       index: index,
                       onDropItem: widget.items[index].onDropItem,
                       onTapItem: widget.items[index].onTapItem,
