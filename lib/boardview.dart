@@ -41,6 +41,8 @@ class BoardViewState extends State<BoardView> {
   double bottomItemY;
   double height;
   double width = 280;
+  int startListIndex;
+  int startItemIndex;
 
   bool canDrag = true;
 
@@ -283,6 +285,9 @@ class BoardViewState extends State<BoardView> {
               footer: widget.lists[index].footer,
               header: widget.lists[index].header,
               boardView: this,
+              onDropList: widget.lists[index].onDropList,
+              onTapList: widget.lists[index].onTapList,
+              onStartDragList: widget.lists[index].onStartDragList,
             );
           }
           if (widget.lists[index].index != index) {
@@ -294,6 +299,9 @@ class BoardViewState extends State<BoardView> {
               header: widget.lists[index].header,
               boardView: this,
               index: index,
+              onDropList: widget.lists[index].onDropList,
+              onTapList: widget.lists[index].onTapList,
+              onStartDragList: widget.lists[index].onStartDragList,
             );
           }
           var temp = Container(
@@ -519,6 +527,8 @@ class BoardViewState extends State<BoardView> {
                 bottomListY = null;
                 topItemY = null;
                 bottomItemY = null;
+                startListIndex = null;
+                startItemIndex = null;
               });
             },
             child: new Stack(

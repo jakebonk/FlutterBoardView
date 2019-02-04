@@ -2,7 +2,7 @@ import 'package:boardview/board_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-typedef void OnDropItem(int listIndex, int itemIndex, BoardItemState state);
+typedef void OnDropItem(int listIndex, int itemIndex,int oldListIndex,int oldItemIndex BoardItemState state);
 typedef void OnTapItem(int listIndex, int itemIndex, BoardItemState state);
 typedef void OnStartDragItem(
     int listIndex, int itemIndex, BoardItemState state);
@@ -42,7 +42,7 @@ class BoardItemState extends State<BoardItem> {
   void onDropItem(int listIndex, int itemIndex) {
     widget.boardList.widget.boardView.listStates[listIndex].setState(() {
       if (widget.onDropItem != null) {
-        widget.onDropItem(listIndex, itemIndex, this);
+        widget.onDropItem(listIndex, itemIndex,widget.boardList.widget.boardView.startListIndex,widget.boardList.widget.boardView.startItemIndex, this);
       }
       widget.boardList.widget.boardView.draggedItemIndex = null;
       widget.boardList.widget.boardView.draggedListIndex = null;
@@ -56,6 +56,8 @@ class BoardItemState extends State<BoardItem> {
         widget.boardList.widget.boardView.height = context.size.height;
         widget.boardList.widget.boardView.draggedListIndex =
             widget.boardList.widget.index;
+        widget.boardList.widget.boardView.startListIndex = widget.boardList.widget.index;
+        widget.boardList.widget.boardView.startItemIndex = widget.index;
         widget.boardList.widget.boardView.draggedItem = item;
         widget.boardList.setState(() {
           widget.boardList.widget.boardView.onDropItem = onDropItem;
@@ -65,8 +67,6 @@ class BoardItemState extends State<BoardItem> {
               widget.boardList.widget.index, widget.index, this);
         }
       });
-    } else {
-      print("BoardView is null");
     }
   }
 

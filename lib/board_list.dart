@@ -3,6 +3,10 @@ import 'package:boardview/boardview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
+typedef void OnDropList(int listIndex,int oldListIndex);
+typedef void OnTapList(int listIndex);
+typedef void OnStartDragList(int listIndex);
+
 class BoardList extends StatefulWidget {
   final Widget header;
   final Widget footer;
@@ -10,6 +14,9 @@ class BoardList extends StatefulWidget {
   final Color backgroundColor;
   final Color headerBackgroundColor;
   final BoardViewState boardView;
+  final OnDropList onDropList;
+  final OnTapList onTapList;
+  final OnStartDragList onStartDragList;
 
   const BoardList({
     Key key,
@@ -19,7 +26,7 @@ class BoardList extends StatefulWidget {
     this.backgroundColor,
     this.headerBackgroundColor,
     this.boardView,
-    this.index,
+    this.index, this.onDropList, this.onTapList, this.onStartDragList,
   }) : super(key: key);
 
   final int index;
@@ -36,6 +43,10 @@ class BoardListState extends State<BoardList> {
 
   void onDropList(int listIndex) {
     widget.boardView.setState(() {
+
+      if(widget.onDropList != null){
+        widget.onDropList(listIndex,widget.boardView.startListIndex);
+      }
       widget.boardView.draggedListIndex = null;
     });
   }
@@ -43,14 +54,16 @@ class BoardListState extends State<BoardList> {
   void _startDrag(Widget item, BuildContext context) {
     if (widget.boardView != null) {
       widget.boardView.setState(() {
+        if(widget.onStartDragList != null){
+          widget.onStartDragList(widget.index);
+        }
+        widget.boardView.startListIndex = widget.index;
         widget.boardView.height = context.size.height;
         widget.boardView.draggedListIndex = widget.index;
         widget.boardView.draggedItemIndex = null;
         widget.boardView.draggedItem = item;
         widget.boardView.onDropList = onDropList;
       });
-    } else {
-      print("BoardView is null");
     }
   }
 
@@ -63,6 +76,11 @@ class BoardListState extends State<BoardList> {
         headerBackgroundColor = widget.headerBackgroundColor;
       }
       listWidgets.add(GestureDetector(
+        onTap: (){
+          if(widget.onTapList != null){
+            widget.onTapList(widget.index);
+          }
+        },
         onTapDown: (otd) {
           RenderBox object = context.findRenderObject();
           Offset pos = object.localToGlobal(Offset.zero);
