@@ -8,7 +8,7 @@ typedef void OnTapList(int listIndex);
 typedef void OnStartDragList(int listIndex);
 
 class BoardList extends StatefulWidget {
-  final Widget header;
+  final List<Widget> header;
   final Widget footer;
   final List<BoardItem> items;
   final Color backgroundColor;
@@ -99,9 +99,7 @@ class BoardListState extends State<BoardList> {
           child: Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                widget.header,
-              ]),
+              children: widget.header),
         )));
 
     }

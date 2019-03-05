@@ -2,7 +2,7 @@ import 'package:boardview/board_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-typedef void OnDropItem(int listIndex, int itemIndex,int oldListIndex,int oldItemIndex BoardItemState state);
+typedef void OnDropItem(int listIndex, int itemIndex,int oldListIndex,int oldItemIndex, BoardItemState state);
 typedef void OnTapItem(int listIndex, int itemIndex, BoardItemState state);
 typedef void OnStartDragItem(
     int listIndex, int itemIndex, BoardItemState state);
