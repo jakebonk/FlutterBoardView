@@ -17,15 +17,18 @@ class BoardList extends StatefulWidget {
   final OnDropList onDropList;
   final OnTapList onTapList;
   final OnStartDragList onStartDragList;
+  final bool draggable;
 
   const BoardList({
     Key key,
     this.header,
+
     this.items,
     this.footer,
     this.backgroundColor,
     this.headerBackgroundColor,
     this.boardView,
+    this.draggable = true,
     this.index, this.onDropList, this.onTapList, this.onStartDragList,
   }) : super(key: key);
 
@@ -82,17 +85,21 @@ class BoardListState extends State<BoardList> {
           }
         },
         onTapDown: (otd) {
-          RenderBox object = context.findRenderObject();
-          Offset pos = object.localToGlobal(Offset.zero);
-          widget.boardView.initialX = pos.dx;
-          widget.boardView.initialY = pos.dy;
+          if(widget.draggable) {
+            RenderBox object = context.findRenderObject();
+            Offset pos = object.localToGlobal(Offset.zero);
+            widget.boardView.initialX = pos.dx;
+            widget.boardView.initialY = pos.dy;
 
-          widget.boardView.rightListX = pos.dx + object.size.width;
-          widget.boardView.leftListX = pos.dx;
+            widget.boardView.rightListX = pos.dx + object.size.width;
+            widget.boardView.leftListX = pos.dx;
+          }
         },
         onTapCancel: () {},
         onLongPress: () {
-          _startDrag(widget, context);
+          if(widget.draggable) {
+            _startDrag(widget, context);
+          }
         },
         child: Container(
           color: headerBackgroundColor,
@@ -120,6 +127,7 @@ class BoardListState extends State<BoardList> {
                     widget.items[index] = new BoardItem(
                       boardList: this,
                       item: widget.items[index].item,
+                      draggable: widget.items[index].draggable,
                       index: index,
                       onDropItem: widget.items[index].onDropItem,
                       onTapItem: widget.items[index].onTapItem,
