@@ -388,8 +388,17 @@ class BoardViewState extends State<BoardView> {
                       5,
                   duration: new Duration(milliseconds: 10),
                   curve: Curves.ease);
-              topItemY += 5;
-              bottomItemY += 5;
+              var dif = listStates[draggedListIndex]
+                  .boardListController
+                  .position
+                  .pixels - 5;
+              if(dif > 5){
+                topItemY += 5;
+                bottomItemY += 5;
+              }else if(dif > 0){
+                topItemY += dif;
+                bottomItemY += dif;
+              }
             }
           }
           if (0 <= draggedItemIndex - 1 &&
@@ -414,8 +423,18 @@ class BoardViewState extends State<BoardView> {
                       5,
                   duration: new Duration(milliseconds: 10),
                   curve: Curves.ease);
-              topItemY -= 5;
-              bottomItemY -= 5;
+              var dif = listStates[draggedListIndex]
+                  .boardListController.position.maxScrollExtent - listStates[draggedListIndex]
+                  .boardListController
+                  .position
+                  .pixels;
+              if(dif > 5){
+                topItemY -= 5;
+                bottomItemY -= 5;
+              }else if(dif > 0){
+                topItemY -= dif;
+                bottomItemY -= dif;
+              }
             }
           }
           if (widget.lists[draggedListIndex].items.length >
