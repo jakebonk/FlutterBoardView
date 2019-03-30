@@ -6,10 +6,11 @@ import 'package:boardview/board_list.dart';
 
 class BoardView extends StatefulWidget {
   final List<BoardList> lists;
-
+  final double width;
   const BoardView({
     Key key,
     this.lists,
+    this.width = 280
   }) : super(key: key);
 
   @override
@@ -40,7 +41,6 @@ class BoardViewState extends State<BoardView> {
   double topItemY;
   double bottomItemY;
   double height;
-  double width = 280;
   int startListIndex;
   int startItemIndex;
 
@@ -100,7 +100,7 @@ class BoardViewState extends State<BoardView> {
       if (_boardViewController != null && _boardViewController.hasClients) {
         int tempListIndex = draggedListIndex;
         _boardViewController
-            .animateTo(draggedListIndex * width,
+            .animateTo(draggedListIndex * widget.width,
                 duration: new Duration(milliseconds: 400), curve: Curves.ease)
             .whenComplete(() {
           RenderBox object =
@@ -155,7 +155,7 @@ class BoardViewState extends State<BoardView> {
         int tempListIndex = draggedListIndex;
         int tempItemIndex = draggedItemIndex;
         _boardViewController
-            .animateTo(draggedListIndex * width,
+            .animateTo(draggedListIndex * widget.width,
                 duration: new Duration(milliseconds: 400), curve: Curves.ease)
             .whenComplete(() {
           RenderBox object =
@@ -191,7 +191,7 @@ class BoardViewState extends State<BoardView> {
       if (_boardViewController != null && _boardViewController.hasClients) {
         int tempListIndex = draggedListIndex;
         _boardViewController
-            .animateTo(draggedListIndex * width,
+            .animateTo(draggedListIndex * widget.width,
                 duration: new Duration(milliseconds: 400), curve: Curves.ease)
             .whenComplete(() {
           RenderBox object =
@@ -246,7 +246,7 @@ class BoardViewState extends State<BoardView> {
         int tempListIndex = draggedListIndex;
         int tempItemIndex = draggedItemIndex;
         _boardViewController
-            .animateTo(draggedListIndex * width,
+            .animateTo(draggedListIndex * widget.width,
                 duration: new Duration(milliseconds: 400), curve: Curves.ease)
             .whenComplete(() {
           RenderBox object =
@@ -307,7 +307,7 @@ class BoardViewState extends State<BoardView> {
             );
           }
           var temp = Container(
-              width: width,
+              width: widget.width,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -332,7 +332,7 @@ class BoardViewState extends State<BoardView> {
         dx != null &&
         dy != null &&
         height != null &&
-        width != null) {
+        widget.width != null) {
       if (canDrag && dxInit != null && dyInit != null) {
         if (draggedItemIndex != null &&
             draggedItem != null &&
@@ -489,7 +489,7 @@ class BoardViewState extends State<BoardView> {
         }
       }
       stackWidgets.add(Positioned(
-        width: width,
+        width: widget.width,
         height: height,
         child: draggedItem,
         left: (dx - offsetX) + initialX,
