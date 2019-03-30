@@ -22,7 +22,6 @@ class BoardList extends StatefulWidget {
   const BoardList({
     Key key,
     this.header,
-
     this.items,
     this.footer,
     this.backgroundColor,
@@ -55,7 +54,7 @@ class BoardListState extends State<BoardList> {
   }
 
   void _startDrag(Widget item, BuildContext context) {
-    if (widget.boardView != null) {
+    if (widget.boardView != null && widget.draggable) {
       widget.boardView.setState(() {
         if(widget.onStartDragList != null){
           widget.onStartDragList(widget.index);
@@ -98,6 +97,7 @@ class BoardListState extends State<BoardList> {
         onTapCancel: () {},
         onLongPress: () {
           if(widget.draggable) {
+            print("oorf");
             _startDrag(widget, context);
           }
         },
