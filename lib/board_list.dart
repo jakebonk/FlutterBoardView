@@ -117,6 +117,7 @@ class BoardListState extends State<BoardList> {
               fit: FlexFit.loose,
               child: new ListView.builder(
                 shrinkWrap: true,
+                physics: ClampingScrollPhysics(),
                 controller: boardListController,
                 itemCount: widget.items.length,
                 itemBuilder: (ctx, index) {
