@@ -65,6 +65,7 @@ class BoardListState extends State<BoardList> {
         widget.boardView.draggedItemIndex = null;
         widget.boardView.draggedItem = item;
         widget.boardView.onDropList = onDropList;
+        widget.boardView.run();
       });
     }
   }
@@ -78,39 +79,38 @@ class BoardListState extends State<BoardList> {
         headerBackgroundColor = widget.headerBackgroundColor;
       }
       listWidgets.add(GestureDetector(
-        onTap: (){
-          if(widget.onTapList != null){
-            widget.onTapList(widget.index);
-          }
-        },
-        onTapDown: (otd) {
-          if(widget.draggable) {
-            RenderBox object = context.findRenderObject();
-            Offset pos = object.localToGlobal(Offset.zero);
-            widget.boardView.initialX = pos.dx;
-            widget.boardView.initialY = pos.dy;
+          onTap: (){
+            if(widget.onTapList != null){
+              widget.onTapList(widget.index);
+            }
+          },
+          onTapDown: (otd) {
+            if(widget.draggable) {
+              RenderBox object = context.findRenderObject();
+              Offset pos = object.localToGlobal(Offset.zero);
+              widget.boardView.initialX = pos.dx;
+              widget.boardView.initialY = pos.dy;
 
-            widget.boardView.rightListX = pos.dx + object.size.width;
-            widget.boardView.leftListX = pos.dx;
-          }
-        },
-        onTapCancel: () {},
-        onLongPress: () {
-          if(widget.draggable) {
-            print("oorf");
-            _startDrag(widget, context);
-          }
-        },
-        child: Container(
-          color: headerBackgroundColor,
-          child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: widget.header),
-        )));
+              widget.boardView.rightListX = pos.dx + object.size.width;
+              widget.boardView.leftListX = pos.dx;
+            }
+          },
+          onTapCancel: () {},
+          onLongPress: () {
+            if(!widget.boardView.widget.isSelecting && widget.draggable) {
+              print("oorf");
+              _startDrag(widget, context);
+            }
+          },
+          child: Container(
+            color: widget.headerBackgroundColor,
+            child: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: widget.header),
+          )));
 
     }
-
     if (widget.items != null) {
       listWidgets.add(Container(
           child: Flexible(

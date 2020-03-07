@@ -21,14 +21,14 @@ class BoardItem extends StatefulWidget {
 
   const BoardItem(
       {Key key,
-      this.boardList,
-      this.item,
-      this.index,
-      this.onDropItem,
-      this.onTapItem,
-      this.onStartDragItem,
-      this.draggable = true,
-      this.onDragItem})
+        this.boardList,
+        this.item,
+        this.index,
+        this.onDropItem,
+        this.onTapItem,
+        this.onStartDragItem,
+        this.draggable = true,
+        this.onDragItem})
       : super(key: key);
 
   @override
@@ -53,6 +53,9 @@ class BoardItemState extends State<BoardItem> {
 
   void _startDrag(Widget item, BuildContext context) {
     if (widget.boardList.widget.boardView != null) {
+      widget.boardList.setState(() {
+        widget.boardList.widget.boardView.onDropItem = onDropItem;
+      });
       widget.boardList.widget.boardView.setState(() {
         widget.boardList.widget.boardView.draggedItemIndex = widget.index;
         widget.boardList.widget.boardView.height = context.size.height;
@@ -61,13 +64,11 @@ class BoardItemState extends State<BoardItem> {
         widget.boardList.widget.boardView.startListIndex = widget.boardList.widget.index;
         widget.boardList.widget.boardView.startItemIndex = widget.index;
         widget.boardList.widget.boardView.draggedItem = item;
-        widget.boardList.setState(() {
-          widget.boardList.widget.boardView.onDropItem = onDropItem;
-        });
         if (widget.onStartDragItem != null) {
           widget.onStartDragItem(
               widget.boardList.widget.index, widget.index, this);
         }
+        widget.boardList.widget.boardView.run();
       });
     }
   }
@@ -113,7 +114,7 @@ class BoardItemState extends State<BoardItem> {
         }
       },
       onLongPress: () {
-        if(widget.draggable) {
+        if(!widget.boardList.widget.boardView.widget.isSelecting && widget.draggable) {
           _startDrag(widget, context);
         }
       },
