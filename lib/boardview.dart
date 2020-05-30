@@ -2,6 +2,7 @@ library boardview;
 
 import 'dart:math';
 
+import 'package:boardview/boardview_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'dart:core';
@@ -13,10 +14,11 @@ class BoardView extends StatefulWidget {
   Widget middleWidget;
   double bottomPadding;
   bool isSelecting;
+  BoardViewController boardViewController;
 
   Function(bool) itemInMiddleWidget;
-  OnDropItem onDropItemInMiddleWidget;
-  BoardView({Key key, this.itemInMiddleWidget,this.onDropItemInMiddleWidget, this.isSelecting = false, this.lists, this.width = 280, this.middleWidget, this.bottomPadding}) : super(key: key);
+  OnDropBottomWidget onDropItemInMiddleWidget;
+  BoardView({Key key, this.itemInMiddleWidget,this.boardViewController,this.onDropItemInMiddleWidget, this.isSelecting = false, this.lists, this.width = 280, this.middleWidget, this.bottomPadding}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -24,6 +26,7 @@ class BoardView extends StatefulWidget {
   }
 }
 
+typedef void OnDropBottomWidget(int listIndex, int itemIndex,double percentX);
 typedef void OnDropItem(int listIndex, int itemIndex);
 typedef void OnDropList(int listIndex);
 
@@ -51,7 +54,7 @@ class BoardViewState extends State<BoardView> {
 
   bool canDrag = true;
 
-  ScrollController _boardViewController = new ScrollController();
+  ScrollController boardViewController = new ScrollController();
 
   List<BoardListState> listStates = List<BoardListState>();
 
@@ -61,6 +64,14 @@ class BoardViewState extends State<BoardView> {
   bool _isInWidget = false;
 
   var pointer;
+
+  @override
+  void initState() {
+    super.initState();
+    if(widget.boardViewController != null){
+      widget.boardViewController.state = this;
+    }
+  }
 
   void moveDown() {
     listStates[draggedListIndex].setState(() {
@@ -98,9 +109,9 @@ class BoardViewState extends State<BoardView> {
       widget.lists.insert(draggedListIndex, list);
       listStates.insert(draggedListIndex, listState);
       canDrag = false;
-      if (_boardViewController != null && _boardViewController.hasClients) {
+      if (boardViewController != null && boardViewController.hasClients) {
         int tempListIndex = draggedListIndex;
-        _boardViewController
+        boardViewController
             .animateTo(draggedListIndex * widget.width, duration: new Duration(milliseconds: 400), curve: Curves.ease)
             .whenComplete(() {
           RenderBox object = listStates[tempListIndex].context.findRenderObject();
@@ -143,10 +154,10 @@ class BoardViewState extends State<BoardView> {
         listStates[draggedListIndex].itemStates.insert(draggedItemIndex, itemState);
         canDrag = false;
       });
-      if (_boardViewController != null && _boardViewController.hasClients) {
+      if (boardViewController != null && boardViewController.hasClients) {
         int tempListIndex = draggedListIndex;
         int tempItemIndex = draggedItemIndex;
-        _boardViewController
+        boardViewController
             .animateTo(draggedListIndex * widget.width, duration: new Duration(milliseconds: 400), curve: Curves.ease)
             .whenComplete(() {
           RenderBox object = listStates[tempListIndex].context.findRenderObject();
@@ -175,9 +186,9 @@ class BoardViewState extends State<BoardView> {
       widget.lists.insert(draggedListIndex, list);
       listStates.insert(draggedListIndex, listState);
       canDrag = false;
-      if (_boardViewController != null && _boardViewController.hasClients) {
+      if (boardViewController != null && boardViewController.hasClients) {
         int tempListIndex = draggedListIndex;
-        _boardViewController
+        boardViewController
             .animateTo(draggedListIndex * widget.width, duration: new Duration(milliseconds: 400), curve: Curves.ease)
             .whenComplete(() {
           RenderBox object = listStates[tempListIndex].context.findRenderObject();
@@ -220,10 +231,10 @@ class BoardViewState extends State<BoardView> {
         listStates[draggedListIndex].itemStates.insert(draggedItemIndex, itemState);
         canDrag = false;
       });
-      if (_boardViewController != null && _boardViewController.hasClients) {
+      if (boardViewController != null && boardViewController.hasClients) {
         int tempListIndex = draggedListIndex;
         int tempItemIndex = draggedItemIndex;
-        _boardViewController
+        boardViewController
             .animateTo(draggedListIndex * widget.width, duration: new Duration(milliseconds: 400), curve: Curves.ease)
             .whenComplete(() {
           RenderBox object = listStates[tempListIndex].context.findRenderObject();
@@ -249,7 +260,7 @@ class BoardViewState extends State<BoardView> {
         physics: ClampingScrollPhysics(),
         itemCount: widget.lists.length,
         scrollDirection: Axis.horizontal,
-        controller: _boardViewController,
+        controller: boardViewController,
         itemBuilder: (BuildContext context, int index) {
           if (widget.lists[index].boardView == null) {
             widget.lists[index] = BoardList(
@@ -323,8 +334,8 @@ class BoardViewState extends State<BoardView> {
           //dragging item
           if (0 <= draggedListIndex - 1 && dx < leftListX + 45) {
             //scroll left
-            if (_boardViewController != null && _boardViewController.hasClients) {
-              _boardViewController.animateTo(_boardViewController.position.pixels - 5,
+            if (boardViewController != null && boardViewController.hasClients) {
+              boardViewController.animateTo(boardViewController.position.pixels - 5,
                   duration: new Duration(milliseconds: 10), curve: Curves.ease);
               RenderBox object = listStates[draggedListIndex].context.findRenderObject();
               Offset pos = object.localToGlobal(Offset.zero);
@@ -334,8 +345,8 @@ class BoardViewState extends State<BoardView> {
           }
           if (widget.lists.length > draggedListIndex + 1 && dx > rightListX - 45) {
             //scroll right
-            if (_boardViewController != null && _boardViewController.hasClients) {
-              _boardViewController.animateTo(_boardViewController.position.pixels + 5,
+            if (boardViewController != null && boardViewController.hasClients) {
+              boardViewController.animateTo(boardViewController.position.pixels + 5,
                   duration: new Duration(milliseconds: 10), curve: Curves.ease);
               RenderBox object = listStates[draggedListIndex].context.findRenderObject();
               Offset pos = object.localToGlobal(Offset.zero);
@@ -402,8 +413,8 @@ class BoardViewState extends State<BoardView> {
           //dragging list
           if (0 <= draggedListIndex - 1 && dx < leftListX + 45) {
             //scroll left
-            if (_boardViewController != null && _boardViewController.hasClients) {
-              _boardViewController.animateTo(_boardViewController.position.pixels - 5,
+            if (boardViewController != null && boardViewController.hasClients) {
+              boardViewController.animateTo(boardViewController.position.pixels - 5,
                   duration: new Duration(milliseconds: 10), curve: Curves.ease);
               leftListX += 5;
               rightListX += 5;
@@ -412,8 +423,8 @@ class BoardViewState extends State<BoardView> {
 
           if (widget.lists.length > draggedListIndex + 1 && dx > rightListX - 45) {
             //scroll right
-            if (_boardViewController != null && _boardViewController.hasClients) {
-              _boardViewController.animateTo(_boardViewController.position.pixels + 5,
+            if (boardViewController != null && boardViewController.hasClients) {
+              boardViewController.animateTo(boardViewController.position.pixels + 5,
                   duration: new Duration(milliseconds: 10), curve: Curves.ease);
               leftListX -= 5;
               rightListX -= 5;
@@ -476,13 +487,19 @@ class BoardViewState extends State<BoardView> {
 
                   if(_isInWidget && widget.onDropItemInMiddleWidget != null){
                     onDropItem(startDraggedListIndex, startDraggedItemIndex);
-                    widget.onDropItemInMiddleWidget(startDraggedListIndex, startDraggedItemIndex);
+                    widget.onDropItemInMiddleWidget(startDraggedListIndex, startDraggedItemIndex,opu.position.dx/MediaQuery.of(context).size.width);
                   }else{
                     onDropItem(tempDraggedListIndex, tempDraggedItemIndex);
                   }
                 }
                 if (onDropList != null) {
-                  onDropList(draggedListIndex);
+                  int tempDraggedListIndex = draggedListIndex;
+                  if(_isInWidget && widget.onDropItemInMiddleWidget != null){
+                    onDropList(tempDraggedListIndex);
+                    widget.onDropItemInMiddleWidget(tempDraggedListIndex,null,opu.position.dx/MediaQuery.of(context).size.width);
+                  }else{
+                    onDropList(tempDraggedListIndex);
+                  }
                 }
                 draggedItem = null;
                 offsetX = null;

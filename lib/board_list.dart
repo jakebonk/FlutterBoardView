@@ -98,7 +98,6 @@ class BoardListState extends State<BoardList> {
           onTapCancel: () {},
           onLongPress: () {
             if(!widget.boardView.widget.isSelecting && widget.draggable) {
-              print("oorf");
               _startDrag(widget, context);
             }
           },
