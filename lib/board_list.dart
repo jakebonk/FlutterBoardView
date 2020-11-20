@@ -39,36 +39,42 @@ class BoardList extends StatefulWidget {
   }
 }
 
-class BoardListState extends State<BoardList> {
+class BoardListState extends State<BoardList> with AutomaticKeepAliveClientMixin{
   List<BoardItemState> itemStates = List<BoardItemState>();
   ScrollController boardListController = new ScrollController();
 
   void onDropList(int listIndex) {
-    widget.boardView.setState(() {
+    if(widget.onDropList != null){
+      widget.onDropList(listIndex,widget.boardView.startListIndex);
+    }
+    widget.boardView.draggedListIndex = null;
+    if(widget.boardView.mounted) {
+      widget.boardView.setState(() {
 
-      if(widget.onDropList != null){
-        widget.onDropList(listIndex,widget.boardView.startListIndex);
-      }
-      widget.boardView.draggedListIndex = null;
-    });
+      });
+    }
   }
 
   void _startDrag(Widget item, BuildContext context) {
     if (widget.boardView != null && widget.draggable) {
-      widget.boardView.setState(() {
-        if(widget.onStartDragList != null){
-          widget.onStartDragList(widget.index);
-        }
-        widget.boardView.startListIndex = widget.index;
-        widget.boardView.height = context.size.height;
-        widget.boardView.draggedListIndex = widget.index;
-        widget.boardView.draggedItemIndex = null;
-        widget.boardView.draggedItem = item;
-        widget.boardView.onDropList = onDropList;
-        widget.boardView.run();
-      });
+      if(widget.onStartDragList != null){
+        widget.onStartDragList(widget.index);
+      }
+      widget.boardView.startListIndex = widget.index;
+      widget.boardView.height = context.size.height;
+      widget.boardView.draggedListIndex = widget.index;
+      widget.boardView.draggedItemIndex = null;
+      widget.boardView.draggedItem = item;
+      widget.boardView.onDropList = onDropList;
+      widget.boardView.run();
+      if(widget.boardView.mounted) {
+        widget.boardView.setState(() {});
+      }
     }
   }
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {
