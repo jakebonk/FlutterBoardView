@@ -426,9 +426,12 @@ class BoardViewState extends State<BoardView> with AutomaticKeepAliveClientMixin
           }
           double tempBottom = bottomListY;
           if(widget.middleWidget != null){
-            RenderBox _box = _middleWidgetKey.currentContext.findRenderObject();
-            tempBottom = _box.size.height;
-            print("tempBottom:${tempBottom}");
+            if(_middleWidgetKey.currentContext != null) {
+              RenderBox _box = _middleWidgetKey.currentContext
+                  .findRenderObject();
+              tempBottom = _box.size.height;
+              print("tempBottom:${tempBottom}");
+            }
           }
           if (dy > tempBottom - 70) {
             //scroll down
