@@ -6,13 +6,13 @@ class BoardViewController{
 
   BoardViewController();
 
-  BoardViewState state;
+  late BoardViewState state;
 
-  Future<void> animateTo(int index,{Duration duration,Curve curve})async{
+  Future<void> animateTo(int index,{Duration? duration,Curve? curve})async{
     double offset = index * state.widget.width;
     if (state.boardViewController != null && state.boardViewController.hasClients) {
       await state.boardViewController.animateTo(
-          offset, duration: duration, curve: curve);
+          offset, duration: duration!, curve: curve!);
     }
   }
 }

@@ -1,6 +1,6 @@
 class BoardItemObject{
 
-  String title;
+  String? title;
 
   BoardItemObject({this.title}){
     if(this.title == null){
