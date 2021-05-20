@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'dart:core';
 import 'package:boardview/board_list.dart';
+import 'package:vs_scrollbar/vs_scrollbar.dart';
 
 class BoardView extends StatefulWidget {
   final List<BoardList>? lists;
@@ -14,12 +15,14 @@ class BoardView extends StatefulWidget {
   Widget? middleWidget;
   double? bottomPadding;
   bool isSelecting;
+  bool? scrollbar;
+  ScrollbarStyle? scrollbarStyle;
   BoardViewController? boardViewController;
   int dragDelay;
 
   Function(bool)? itemInMiddleWidget;
   OnDropBottomWidget? onDropItemInMiddleWidget;
-  BoardView({Key? key, this.itemInMiddleWidget,this.boardViewController,this.dragDelay=300,this.onDropItemInMiddleWidget, this.isSelecting = false, this.lists, this.width = 280, this.middleWidget, this.bottomPadding}) : super(key: key);
+  BoardView({Key? key, this.itemInMiddleWidget,this.scrollbar,this.scrollbarStyle,this.boardViewController,this.dragDelay=300,this.onDropItemInMiddleWidget, this.isSelecting = false, this.lists, this.width = 280, this.middleWidget, this.bottomPadding}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -293,66 +296,97 @@ class BoardViewState extends State<BoardView> with AutomaticKeepAliveClientMixin
     }
   }
 
+  bool shown = true;
+
   @override
   Widget build(BuildContext context) {
     print("dy:${dy}");
     print("topListY:${topListY}");
     print("bottomListY:${bottomListY}");
-    List<Widget> stackWidgets = <Widget>[
-      ListView.builder(
-        physics: ClampingScrollPhysics(),
-        itemCount: widget.lists!.length,
-        scrollDirection: Axis.horizontal,
-        controller: boardViewController,
-        itemBuilder: (BuildContext context, int index) {
-          if (widget.lists![index].boardView == null) {
-            widget.lists![index] = BoardList(
-              items: widget.lists![index].items,
-              headerBackgroundColor: widget.lists![index].headerBackgroundColor,
-              backgroundColor: widget.lists![index].backgroundColor,
-              footer: widget.lists![index].footer,
-              header: widget.lists![index].header,
-              boardView: this,
-              draggable: widget.lists![index].draggable,
-              onDropList: widget.lists![index].onDropList,
-              onTapList: widget.lists![index].onTapList,
-              onStartDragList: widget.lists![index].onStartDragList,
-            );
-          }
-          if (widget.lists![index].index != index) {
-            widget.lists![index] = BoardList(
-              items: widget.lists![index].items,
-              headerBackgroundColor: widget.lists![index].headerBackgroundColor,
-              backgroundColor: widget.lists![index].backgroundColor,
-              footer: widget.lists![index].footer,
-              header: widget.lists![index].header,
-              boardView: this,
-              draggable: widget.lists![index].draggable,
-              index: index,
-              onDropList: widget.lists![index].onDropList,
-              onTapList: widget.lists![index].onTapList,
-              onStartDragList: widget.lists![index].onStartDragList,
-            );
-          }
+    if(boardViewController.hasClients) {
+      WidgetsBinding.instance!.addPostFrameCallback((Duration duration) {
+        try {
+          boardViewController.position.didUpdateScrollPositionBy(0);
+        }catch(e){}
+        bool _shown = boardViewController.position.maxScrollExtent!=0;
+        if(_shown != shown){
+          setState(() {
+            shown = _shown;
+          });
+        }
+      });
+    }
+    Widget listWidget = ListView.builder(
+      physics: ClampingScrollPhysics(),
+      itemCount: widget.lists!.length,
+      scrollDirection: Axis.horizontal,
+      controller: boardViewController,
+      itemBuilder: (BuildContext context, int index) {
+        if (widget.lists![index].boardView == null) {
+          widget.lists![index] = BoardList(
+            items: widget.lists![index].items,
+            headerBackgroundColor: widget.lists![index].headerBackgroundColor,
+            backgroundColor: widget.lists![index].backgroundColor,
+            footer: widget.lists![index].footer,
+            header: widget.lists![index].header,
+            boardView: this,
+            draggable: widget.lists![index].draggable,
+            onDropList: widget.lists![index].onDropList,
+            onTapList: widget.lists![index].onTapList,
+            onStartDragList: widget.lists![index].onStartDragList,
+          );
+        }
+        if (widget.lists![index].index != index) {
+          widget.lists![index] = BoardList(
+            items: widget.lists![index].items,
+            headerBackgroundColor: widget.lists![index].headerBackgroundColor,
+            backgroundColor: widget.lists![index].backgroundColor,
+            footer: widget.lists![index].footer,
+            header: widget.lists![index].header,
+            boardView: this,
+            draggable: widget.lists![index].draggable,
+            index: index,
+            onDropList: widget.lists![index].onDropList,
+            onTapList: widget.lists![index].onTapList,
+            onStartDragList: widget.lists![index].onStartDragList,
+          );
+        }
 
-          var temp = Container(
-              width: widget.width,
-              padding: EdgeInsets.fromLTRB(0, 0, 0, widget.bottomPadding ?? 0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[Expanded(child: widget.lists![index])],
-              ));
-          if (draggedListIndex == index && draggedItemIndex == null) {
-            return Opacity(
-              opacity: 0.0,
-              child: temp,
-            );
-          } else {
-            return temp;
-          }
-        },
-      )
+        var temp = Container(
+            width: widget.width,
+            padding: EdgeInsets.fromLTRB(0, 0, 0, widget.bottomPadding ?? 0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[Expanded(child: widget.lists![index])],
+            ));
+        if (draggedListIndex == index && draggedItemIndex == null) {
+          return Opacity(
+            opacity: 0.0,
+            child: temp,
+          );
+        } else {
+          return temp;
+        }
+      },
+    );
+    if(widget.scrollbar == true){
+      listWidget = VsScrollbar(
+          controller: boardViewController,
+          showTrackOnHover: true,// default false
+          isAlwaysShown: shown&&widget.lists!.length>1, // default false
+          scrollbarFadeDuration: Duration(milliseconds: 500), // default : Duration(milliseconds: 300)
+          scrollbarTimeToFade: Duration(milliseconds: 800),// default : Duration(milliseconds: 600)
+          style: widget.scrollbarStyle!=null?VsScrollbarStyle(
+            hoverThickness: widget.scrollbarStyle!.hoverThickness,
+            radius: widget.scrollbarStyle!.radius,
+            thickness: widget.scrollbarStyle!.thickness,
+            color: widget.scrollbarStyle!.color
+          ):VsScrollbarStyle(),
+          child:listWidget);
+    }
+    List<Widget> stackWidgets = <Widget>[
+      listWidget
     ];
     bool isInBottomWidget = false;
     if (dy != null) {
@@ -635,4 +669,12 @@ class BoardViewState extends State<BoardView> with AutomaticKeepAliveClientMixin
       }
     }
   }
+}
+
+class ScrollbarStyle{
+  double hoverThickness;
+  double thickness;
+  Radius radius;
+  Color color;
+  ScrollbarStyle({this.radius = const Radius.circular(10),this.hoverThickness = 10,this.thickness = 10,this.color = Colors.black});
 }
