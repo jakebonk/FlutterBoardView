@@ -300,11 +300,11 @@ class BoardViewState extends State<BoardView> with AutomaticKeepAliveClientMixin
 
   @override
   Widget build(BuildContext context) {
-    print("dy:${dy}");
-    print("topListY:${topListY}");
-    print("bottomListY:${bottomListY}");
-    if(boardViewController.hasClients) {
-      WidgetsBinding.instance!.addPostFrameCallback((Duration duration) {
+    // print("dy:${dy}");
+    // print("topListY:${topListY}");
+    // print("bottomListY:${bottomListY}");
+    WidgetsBinding.instance!.addPostFrameCallback((Duration duration) {
+      if(boardViewController.hasClients) {
         try {
           boardViewController.position.didUpdateScrollPositionBy(0);
         }catch(e){}
@@ -314,8 +314,8 @@ class BoardViewState extends State<BoardView> with AutomaticKeepAliveClientMixin
             shown = _shown;
           });
         }
-      });
-    }
+      }
+    });
     Widget listWidget = ListView.builder(
       physics: ClampingScrollPhysics(),
       itemCount: widget.lists!.length,
