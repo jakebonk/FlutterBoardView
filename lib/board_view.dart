@@ -35,6 +35,8 @@ class BoardView extends StatefulWidget {
     this.bottomPadding,
   }) : super(key: key);
 
+  bool get isNotSelecting => !isSelecting;
+
   @override
   State<StatefulWidget> createState() {
     return BoardViewState();
@@ -529,10 +531,12 @@ class BoardViewState extends State<BoardView>
                       duration: const Duration(milliseconds: 10),
                       curve: Curves.ease)
                   .whenComplete(() {
-                pos -= listStates[draggedListIndex!]
-                    .boardListController
-                    .position
-                    .pixels;
+                if (draggedListIndex != null) {
+                  pos -= listStates[draggedListIndex!]
+                      .boardListController
+                      .position
+                      .pixels;
+                }
                 initialY ??= 0;
 //                if(widget.boardViewController != null) {
 //                  initialY -= pos;
@@ -589,10 +593,12 @@ class BoardViewState extends State<BoardView>
                       duration: const Duration(milliseconds: 10),
                       curve: Curves.ease)
                   .whenComplete(() {
-                pos -= listStates[draggedListIndex!]
-                    .boardListController
-                    .position
-                    .pixels;
+                if (draggedListIndex != null) {
+                  pos -= listStates[draggedListIndex!]
+                      .boardListController
+                      .position
+                      .pixels;
+                }
                 initialY ??= 0;
 //                if(widget.boardViewController != null) {
 //                  initialY -= pos;

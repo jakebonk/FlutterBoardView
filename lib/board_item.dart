@@ -63,27 +63,50 @@ class BoardItemState extends State<BoardItem>
     }
   }
 
+  bool get canStartDragging =>
+      widget.boardList!.widget.boardView!.widget.isNotSelecting &&
+      widget.draggable;
+
   void _startDrag(Widget item, BuildContext context) {
-    if (widget.boardList!.widget.boardView != null) {
-      widget.boardList!.widget.boardView!.onDropItem = _onDropItem;
-      if (widget.boardList!.mounted) {
-        widget.boardList!.setState(() {});
-      }
-      widget.boardList!.widget.boardView!.draggedItemIndex = widget.index;
-      widget.boardList!.widget.boardView!.height = context.size!.height;
-      widget.boardList!.widget.boardView!.draggedListIndex =
-          widget.boardList!.widget.index;
-      widget.boardList!.widget.boardView!.startListIndex =
-          widget.boardList!.widget.index;
-      widget.boardList!.widget.boardView!.startItemIndex = widget.index;
-      widget.boardList!.widget.boardView!.draggedItem = item;
-      if (widget.onStartDragItem != null) {
-        widget.onStartDragItem!(
-            widget.boardList!.widget.index, widget.index, this);
-      }
-      widget.boardList!.widget.boardView!.run();
-      if (widget.boardList!.widget.boardView!.mounted) {
-        widget.boardList!.widget.boardView!.setState(() {});
+    if (canStartDragging) {
+      RenderBox object = context.findRenderObject() as RenderBox;
+      Offset pos = object.localToGlobal(Offset.zero);
+      RenderBox box = widget.boardList!.context.findRenderObject() as RenderBox;
+      Offset listPos = box.localToGlobal(Offset.zero);
+      widget.boardList!.widget.boardView!.leftListX = listPos.dx;
+      widget.boardList!.widget.boardView!.topListY = listPos.dy;
+      widget.boardList!.widget.boardView!.topItemY = pos.dy;
+      widget.boardList!.widget.boardView!.bottomItemY =
+          pos.dy + object.size.height;
+      widget.boardList!.widget.boardView!.bottomListY =
+          listPos.dy + box.size.height;
+      widget.boardList!.widget.boardView!.rightListX =
+          listPos.dx + box.size.width;
+
+      widget.boardList!.widget.boardView!.initialX = pos.dx;
+      widget.boardList!.widget.boardView!.initialY = pos.dy;
+
+      if (widget.boardList!.widget.boardView != null) {
+        widget.boardList!.widget.boardView!.onDropItem = _onDropItem;
+        if (widget.boardList!.mounted) {
+          widget.boardList!.setState(() {});
+        }
+        widget.boardList!.widget.boardView!.draggedItemIndex = widget.index;
+        widget.boardList!.widget.boardView!.height = context.size!.height;
+        widget.boardList!.widget.boardView!.draggedListIndex =
+            widget.boardList!.widget.index;
+        widget.boardList!.widget.boardView!.startListIndex =
+            widget.boardList!.widget.index;
+        widget.boardList!.widget.boardView!.startItemIndex = widget.index;
+        widget.boardList!.widget.boardView!.draggedItem = item;
+        if (widget.onStartDragItem != null) {
+          widget.onStartDragItem!(
+              widget.boardList!.widget.index, widget.index, this);
+        }
+        widget.boardList!.widget.boardView!.run();
+        if (widget.boardList!.widget.boardView!.mounted) {
+          widget.boardList!.widget.boardView!.setState(() {});
+        }
       }
     }
   }
@@ -105,39 +128,14 @@ class BoardItemState extends State<BoardItem>
     }
     widget.boardList!.itemStates.insert(widget.index!, this);
     return GestureDetector(
-      onTapDown: (otd) {
-        if (widget.draggable) {
-          RenderBox object = context.findRenderObject() as RenderBox;
-          Offset pos = object.localToGlobal(Offset.zero);
-          RenderBox box =
-              widget.boardList!.context.findRenderObject() as RenderBox;
-          Offset listPos = box.localToGlobal(Offset.zero);
-          widget.boardList!.widget.boardView!.leftListX = listPos.dx;
-          widget.boardList!.widget.boardView!.topListY = listPos.dy;
-          widget.boardList!.widget.boardView!.topItemY = pos.dy;
-          widget.boardList!.widget.boardView!.bottomItemY =
-              pos.dy + object.size.height;
-          widget.boardList!.widget.boardView!.bottomListY =
-              listPos.dy + box.size.height;
-          widget.boardList!.widget.boardView!.rightListX =
-              listPos.dx + box.size.width;
-
-          widget.boardList!.widget.boardView!.initialX = pos.dx;
-          widget.boardList!.widget.boardView!.initialY = pos.dy;
-        }
-      },
-      onTapCancel: () {},
       onTap: () {
         if (widget.onTapItem != null) {
           widget.onTapItem!(widget.boardList!.widget.index, widget.index, this);
         }
       },
-      onLongPress: () {
-        if (!widget.boardList!.widget.boardView!.widget.isSelecting &&
-            widget.draggable) {
-          _startDrag(widget, context);
-        }
-      },
+      onHorizontalDragStart: (DragStartDetails _) =>
+          _startDrag(widget, context),
+      onVerticalDragStart: (DragStartDetails _) => _startDrag(widget, context),
       child: widget.item,
     );
   }
