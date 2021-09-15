@@ -47,7 +47,7 @@ class BoardItemState extends State<BoardItem>
   @override
   bool get wantKeepAlive => true;
 
-  void onDropItem(int? listIndex, int? itemIndex) {
+  void _onDropItem(int? listIndex, int? itemIndex) {
     if (widget.onDropItem != null) {
       widget.onDropItem!(
           listIndex,
@@ -65,7 +65,7 @@ class BoardItemState extends State<BoardItem>
 
   void _startDrag(Widget item, BuildContext context) {
     if (widget.boardList!.widget.boardView != null) {
-      widget.boardList!.widget.boardView!.onDropItem = onDropItem;
+      widget.boardList!.widget.boardView!.onDropItem = _onDropItem;
       if (widget.boardList!.mounted) {
         widget.boardList!.setState(() {});
       }
