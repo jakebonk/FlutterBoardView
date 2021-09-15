@@ -81,10 +81,6 @@ class BoardListState extends State<BoardList> with AutomaticKeepAliveClientMixin
     super.build(context);
     List<Widget> listWidgets = [];
     if (widget.header != null) {
-      Color? headerBackgroundColor = Color.fromARGB(255, 255, 255, 255);
-      if (widget.headerBackgroundColor != null) {
-        headerBackgroundColor = widget.headerBackgroundColor;
-      }
       listWidgets.add(GestureDetector(
           onTap: (){
             if(widget.onTapList != null){
@@ -109,7 +105,8 @@ class BoardListState extends State<BoardList> with AutomaticKeepAliveClientMixin
             }
           },
           child: Container(
-            color: widget.headerBackgroundColor,
+            color: widget.headerBackgroundColor ??
+                const Color.fromARGB(255, 255, 255, 255),
             child: Row(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.center,
