@@ -78,6 +78,7 @@ class BoardListState extends State<BoardList> with AutomaticKeepAliveClientMixin
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     List<Widget> listWidgets = [];
     if (widget.header != null) {
       Color? headerBackgroundColor = Color.fromARGB(255, 255, 255, 255);
