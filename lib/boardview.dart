@@ -12,17 +12,30 @@ import 'package:vs_scrollbar/vs_scrollbar.dart';
 class BoardView extends StatefulWidget {
   final List<BoardList>? lists;
   final double width;
-  Widget? middleWidget;
-  double? bottomPadding;
-  bool isSelecting;
-  bool? scrollbar;
-  ScrollbarStyle? scrollbarStyle;
-  BoardViewController? boardViewController;
-  int dragDelay;
+  final Widget? middleWidget;
+  final double? bottomPadding;
+  final bool isSelecting;
+  final bool? scrollbar;
+  final ScrollbarStyle? scrollbarStyle;
+  final BoardViewController? boardViewController;
+  final int dragDelay;
+  final Function(bool)? itemInMiddleWidget;
+  final OnDropBottomWidget? onDropItemInMiddleWidget;
 
-  Function(bool)? itemInMiddleWidget;
-  OnDropBottomWidget? onDropItemInMiddleWidget;
-  BoardView({Key? key, this.itemInMiddleWidget,this.scrollbar,this.scrollbarStyle,this.boardViewController,this.dragDelay=300,this.onDropItemInMiddleWidget, this.isSelecting = false, this.lists, this.width = 280, this.middleWidget, this.bottomPadding}) : super(key: key);
+  BoardView({
+    Key? key,
+    this.itemInMiddleWidget,
+    this.scrollbar,
+    this.scrollbarStyle,
+    this.boardViewController,
+    this.dragDelay = 300,
+    this.onDropItemInMiddleWidget,
+    this.isSelecting = false,
+    this.lists,
+    this.width = 280,
+    this.middleWidget,
+    this.bottomPadding,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {

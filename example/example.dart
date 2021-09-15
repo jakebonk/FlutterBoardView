@@ -8,10 +8,7 @@ import 'BoardItemObject.dart';
 import 'BoardListObject.dart';
 
 class BoardViewExample extends StatelessWidget {
-
-
-
-  List<BoardListObject> _listData = [
+  final List<BoardListObject> _listData = [
     BoardListObject(title: "List title 1"),
     BoardListObject(title: "List title 2"),
     BoardListObject(title: "List title 3")
@@ -19,9 +16,7 @@ class BoardViewExample extends StatelessWidget {
 
 
   //Can be used to animate to different sections of the BoardView
-  BoardViewController boardViewController = new BoardViewController();
-
-
+  final BoardViewController boardViewController = new BoardViewController();
 
   @override
   Widget build(BuildContext context) {
