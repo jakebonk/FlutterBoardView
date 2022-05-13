@@ -1,15 +1,15 @@
 name: boardview
 description: This is a custom Flutter widget that can create a draggable BoardView or also known as a kanban. The view can be reordered with drag and drop.
-version: 0.2.2
+version: 0.2.3
 homepage: https://github.com/jakebonk/FlutterBoardView
 
 environment:
-  sdk: '>=2.12.0 <3.0.0'
+  sdk: '>=2.17.0 <3.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
-  vs_scrollbar: ^0.2.0
+  vs_scrollbar: ^0.2.1
 
 dev_dependencies:
   flutter_test:
