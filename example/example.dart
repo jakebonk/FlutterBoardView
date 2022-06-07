@@ -8,20 +8,14 @@ import 'BoardItemObject.dart';
 import 'BoardListObject.dart';
 
 class BoardViewExample extends StatelessWidget {
-
-
-
-  List<BoardListObject> _listData = [
+  final List<BoardListObject> _listData = [
     BoardListObject(title: "List title 1"),
     BoardListObject(title: "List title 2"),
     BoardListObject(title: "List title 3")
   ];
 
-
   //Can be used to animate to different sections of the BoardView
-  BoardViewController boardViewController = new BoardViewController();
-
-
+  final BoardViewController boardViewController = new BoardViewController();
 
   @override
   Widget build(BuildContext context) {
@@ -37,19 +31,17 @@ class BoardViewExample extends StatelessWidget {
 
   Widget buildBoardItem(BoardItemObject itemObject) {
     return BoardItem(
-        onStartDragItem: (int? listIndex, int? itemIndex, BoardItemState? state) {
-
-        },
+        onStartDragItem:
+            (int? listIndex, int? itemIndex, BoardItemState? state) {},
         onDropItem: (int? listIndex, int? itemIndex, int? oldListIndex,
             int? oldItemIndex, BoardItemState? state) {
           //Used to update our local item data
           var item = _listData[oldListIndex!].items![oldItemIndex!];
-          _listData[oldListIndex].items!.removeAt(oldItemIndex!);
+          _listData[oldListIndex].items!.removeAt(oldItemIndex);
           _listData[listIndex!].items!.insert(itemIndex!, item);
         },
-        onTapItem: (int? listIndex, int? itemIndex, BoardItemState? state) async {
-
-        },
+        onTapItem:
+            (int? listIndex, int? itemIndex, BoardItemState? state) async {},
         item: Card(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -65,16 +57,12 @@ class BoardViewExample extends StatelessWidget {
     }
 
     return BoardList(
-      onStartDragList: (int? listIndex) {
-
-      },
-      onTapList: (int? listIndex) async {
-
-      },
+      onStartDragList: (int? listIndex) {},
+      onTapList: (int? listIndex) async {},
       onDropList: (int? listIndex, int? oldListIndex) {
         //Update our local list data
         var list = _listData[oldListIndex!];
-        _listData.removeAt(oldListIndex!);
+        _listData.removeAt(oldListIndex);
         _listData.insert(listIndex!, list);
       },
       headerBackgroundColor: Color.fromARGB(255, 235, 236, 240),
