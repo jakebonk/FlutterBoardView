@@ -566,7 +566,7 @@ class BoardViewState extends State<BoardView> with AutomaticKeepAliveClientMixin
       if (widget.middleWidget != null) {
         stackWidgets.add(Container(key:_middleWidgetKey,child:widget.middleWidget));
       }
-      WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
         if(mounted){
           setState(() {});
         }
