@@ -511,7 +511,7 @@ class BoardViewState extends State<BoardView> with AutomaticKeepAliveClientMixin
               moveRight();
             }
 
-            if (dy! < topListY! + 70) {
+            if (dy != null && topListY != null && dy! < topListY! + 70) {
               //scroll up
               if (listStates[draggedListIndex!].boardListController.hasClients && !isScrolling) {
                 isScrolling = true;
@@ -522,11 +522,13 @@ class BoardViewState extends State<BoardView> with AutomaticKeepAliveClientMixin
                         duration: new Duration(milliseconds: 10), curve: Curves.ease)
                     .whenComplete(() {
                   pos -= listStates[draggedListIndex!].boardListController.position.pixels;
-                  if (initialY == null) initialY = 0;
-//                if(widget.boardViewController != null) {
-//                  initialY -= pos;
-//                }
+
+                  if (initialY == null) {
+                    initialY = 0;
+                  }
+
                   isScrolling = false;
+
                   if (topItemY != null) {
                     topItemY = topItemY! + pos;
                   }
@@ -539,18 +541,22 @@ class BoardViewState extends State<BoardView> with AutomaticKeepAliveClientMixin
                 });
               }
             }
+
             if (0 <= draggedItemIndex! - 1 && dy! < topItemY! - listStates[draggedListIndex!].itemStates[draggedItemIndex! - 1].height / 2) {
               //move up
               moveUp();
             }
+
             double? tempBottom = bottomListY;
+
             if (widget.middleWidget != null) {
               if (_middleWidgetKey.currentContext != null) {
                 RenderBox _box = _middleWidgetKey.currentContext!.findRenderObject() as RenderBox;
                 tempBottom = _box.size.height;
               }
             }
-            if (dy! > tempBottom! - 70) {
+
+            if (dy != null && tempBottom != null && dy! > tempBottom - 70) {
               //scroll down
 
               if (listStates[draggedListIndex!].boardListController.hasClients) {
@@ -566,9 +572,6 @@ class BoardViewState extends State<BoardView> with AutomaticKeepAliveClientMixin
                   if (initialY == null) {
                     initialY = 0;
                   }
-//                if(widget.boardViewController != null) {
-//                  initialY -= pos;
-//                }
 
                   isScrolling = false;
 
