@@ -214,11 +214,11 @@ class BoardViewState extends State<BoardView> with AutomaticKeepAliveClientMixin
           draggedItemIndex = i;
           dyInit = dy;
         }
-
-        widget.lists![draggedListIndex!].items!.insert(draggedItemIndex!, item);
-        listStates[draggedListIndex!].itemStates.insert(draggedItemIndex!, itemState);
-        canDrag = false;
       }
+
+      widget.lists![draggedListIndex!].items!.insert(draggedItemIndex!, item);
+      listStates[draggedListIndex!].itemStates.insert(draggedItemIndex!, itemState);
+      canDrag = false;
 
       if (listStates[draggedListIndex!].mounted) {
         listStates[draggedListIndex!].setState(() {});
