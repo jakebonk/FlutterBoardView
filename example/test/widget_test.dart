@@ -10,10 +10,10 @@ void main() {
     // Verify that the app title is displayed
     expect(find.text('BoardView Example'), findsOneWidget);
 
-    // Verify that the board lists are displayed
-    expect(find.text('To Do'), findsOneWidget);
-    expect(find.text('In Progress'), findsOneWidget);
-    expect(find.text('Done'), findsOneWidget);
+    // Verify that the board lists are displayed (now appears in buttons too)
+    expect(find.text('To Do'), findsNWidgets(2)); // Button + List header
+    expect(find.text('In Progress'), findsNWidgets(2)); // Button + List header
+    expect(find.text('Done'), findsNWidgets(2)); // Button + List header
 
     // Verify that some tasks are displayed
     expect(find.text('Task 1'), findsOneWidget);

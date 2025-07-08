@@ -2,6 +2,7 @@ library boardview;
 
 import 'dart:math';
 
+import 'package:boardview/board_controller.dart';
 import 'package:boardview/boardview_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -18,11 +19,12 @@ class BoardView extends StatefulWidget {
   bool? scrollbar;
   ScrollbarStyle? scrollbarStyle;
   BoardViewController? boardViewController;
+  BoardController? boardController;
   int dragDelay;
 
   Function(bool)? itemInMiddleWidget;
   OnDropBottomWidget? onDropItemInMiddleWidget;
-  BoardView({Key? key, this.itemInMiddleWidget,this.scrollbar,this.scrollbarStyle,this.boardViewController,this.dragDelay=300,this.onDropItemInMiddleWidget, this.isSelecting = false, this.lists, this.width = 280, this.middleWidget, this.bottomPadding}) : super(key: key);
+  BoardView({Key? key, this.itemInMiddleWidget,this.scrollbar,this.scrollbarStyle,this.boardViewController,this.boardController,this.dragDelay=300,this.onDropItemInMiddleWidget, this.isSelecting = false, this.lists, this.width = 280, this.middleWidget, this.bottomPadding}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -79,14 +81,25 @@ class BoardViewState extends State<BoardView> with AutomaticKeepAliveClientMixin
   @override
   void initState() {
     super.initState();
-    if(widget.boardViewController != null){
-      widget.boardViewController!.state = this;
+    
+    // Initialize modern controller if provided
+    if (widget.boardController != null) {
+      widget.boardController!.itemWidth = widget.width;
+      widget.boardController!.attachScrollController(boardViewController);
+    }
+    
+    // Maintain backward compatibility
+    if (widget.boardViewController != null) {
+      widget.boardViewController!.controller.itemWidth = widget.width;
+      widget.boardViewController!.controller.attachScrollController(boardViewController);
     }
   }
 
   @override
   void dispose() {
     boardViewController.dispose();
+    widget.boardController?.dispose();
+    widget.boardViewController?.dispose();
     super.dispose();
   }
 

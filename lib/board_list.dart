@@ -1,5 +1,6 @@
 import 'package:boardview/board_item.dart';
 import 'package:boardview/boardview.dart';
+import 'package:boardview/board_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -42,6 +43,7 @@ class BoardList extends StatefulWidget {
 class BoardListState extends State<BoardList> with AutomaticKeepAliveClientMixin{
   List<BoardItemState> itemStates = [];
   ScrollController boardListController = ScrollController();
+  late BoardListController listController;
 
   void onDropList(int? listIndex) {
     if(widget.onDropList != null){
@@ -71,6 +73,20 @@ class BoardListState extends State<BoardList> with AutomaticKeepAliveClientMixin
         widget.boardView!.setState(() {});
       }
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    listController = BoardListController();
+    listController.attachScrollController(boardListController);
+  }
+  
+  @override
+  void dispose() {
+    listController.dispose();
+    boardListController.dispose();
+    super.dispose();
   }
 
   @override
