@@ -19,7 +19,7 @@ class BoardViewExample extends StatelessWidget {
 
 
   //Can be used to animate to different sections of the BoardView
-  BoardViewController boardViewController = new BoardViewController();
+  BoardViewController boardViewController = BoardViewController();
 
 
 

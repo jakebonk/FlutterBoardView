@@ -58,7 +58,7 @@ class BoardViewState extends State<BoardView> with AutomaticKeepAliveClientMixin
 
   bool canDrag = true;
 
-  ScrollController boardViewController = new ScrollController();
+  ScrollController boardViewController = ScrollController();
 
   List<BoardListState> listStates = [];
 
@@ -140,13 +140,13 @@ class BoardViewState extends State<BoardView> with AutomaticKeepAliveClientMixin
     if (boardViewController != null && boardViewController.hasClients) {
       int? tempListIndex = draggedListIndex;
       boardViewController
-          .animateTo(draggedListIndex! * widget.width, duration: new Duration(milliseconds: 400), curve: Curves.ease)
+          .animateTo(draggedListIndex! * widget.width, duration: Duration(milliseconds: 400), curve: Curves.ease)
           .whenComplete(() {
         RenderBox object = listStates[tempListIndex!].context.findRenderObject() as RenderBox;
         Offset pos = object.localToGlobal(Offset.zero);
         leftListX = pos.dx;
         rightListX = pos.dx + object.size.width;
-        Future.delayed(new Duration(milliseconds: widget.dragDelay), () {
+        Future.delayed(Duration(milliseconds: widget.dragDelay), () {
           canDrag = true;
         });
       });
@@ -191,7 +191,7 @@ class BoardViewState extends State<BoardView> with AutomaticKeepAliveClientMixin
       int? tempListIndex = draggedListIndex;
       int? tempItemIndex = draggedItemIndex;
       boardViewController
-          .animateTo(draggedListIndex! * widget.width, duration: new Duration(milliseconds: 400), curve: Curves.ease)
+          .animateTo(draggedListIndex! * widget.width, duration: Duration(milliseconds: 400), curve: Curves.ease)
           .whenComplete(() {
         RenderBox object = listStates[tempListIndex!].context.findRenderObject() as RenderBox;
         Offset pos = object.localToGlobal(Offset.zero);
@@ -201,7 +201,7 @@ class BoardViewState extends State<BoardView> with AutomaticKeepAliveClientMixin
         Offset itemPos = box.localToGlobal(Offset.zero);
         topItemY = itemPos.dy;
         bottomItemY = itemPos.dy + box.size.height;
-        Future.delayed(new Duration(milliseconds: widget.dragDelay), () {
+        Future.delayed(Duration(milliseconds: widget.dragDelay), () {
           canDrag = true;
         });
       });
@@ -225,13 +225,13 @@ class BoardViewState extends State<BoardView> with AutomaticKeepAliveClientMixin
     if (boardViewController != null && boardViewController.hasClients) {
       int? tempListIndex = draggedListIndex;
       boardViewController
-          .animateTo(draggedListIndex! * widget.width, duration: new Duration(milliseconds: widget.dragDelay), curve: Curves.ease)
+          .animateTo(draggedListIndex! * widget.width, duration: Duration(milliseconds: widget.dragDelay), curve: Curves.ease)
           .whenComplete(() {
         RenderBox object = listStates[tempListIndex!].context.findRenderObject() as RenderBox;
         Offset pos = object.localToGlobal(Offset.zero);
         leftListX = pos.dx;
         rightListX = pos.dx + object.size.width;
-        Future.delayed(new Duration(milliseconds: widget.dragDelay), () {
+        Future.delayed(Duration(milliseconds: widget.dragDelay), () {
           canDrag = true;
         });
       });
@@ -276,7 +276,7 @@ class BoardViewState extends State<BoardView> with AutomaticKeepAliveClientMixin
       int? tempListIndex = draggedListIndex;
       int? tempItemIndex = draggedItemIndex;
       boardViewController
-          .animateTo(draggedListIndex! * widget.width, duration: new Duration(milliseconds: 400), curve: Curves.ease)
+          .animateTo(draggedListIndex! * widget.width, duration: Duration(milliseconds: 400), curve: Curves.ease)
           .whenComplete(() {
         RenderBox object = listStates[tempListIndex!].context.findRenderObject() as RenderBox;
         Offset pos = object.localToGlobal(Offset.zero);
@@ -286,7 +286,7 @@ class BoardViewState extends State<BoardView> with AutomaticKeepAliveClientMixin
         Offset itemPos = box.localToGlobal(Offset.zero);
         topItemY = itemPos.dy;
         bottomItemY = itemPos.dy + box.size.height;
-        Future.delayed(new Duration(milliseconds: widget.dragDelay), () {
+        Future.delayed(Duration(milliseconds: widget.dragDelay), () {
           canDrag = true;
         });
       });
@@ -304,7 +304,7 @@ class BoardViewState extends State<BoardView> with AutomaticKeepAliveClientMixin
     print("topListY:${topListY}");
     print("bottomListY:${bottomListY}");
     if(boardViewController.hasClients) {
-      WidgetsBinding.instance!.addPostFrameCallback((Duration duration) {
+      WidgetsBinding.instance.addPostFrameCallback((Duration duration) {
         try {
           boardViewController.position.didUpdateScrollPositionBy(0);
         }catch(e){}
@@ -413,7 +413,7 @@ class BoardViewState extends State<BoardView> with AutomaticKeepAliveClientMixin
             //scroll left
             if (boardViewController != null && boardViewController.hasClients) {
               boardViewController.animateTo(boardViewController.position.pixels - 5,
-                  duration: new Duration(milliseconds: 10), curve: Curves.ease);
+                  duration: Duration(milliseconds: 10), curve: Curves.ease);
               if(listStates[draggedListIndex!].mounted) {
                 RenderBox object = listStates[draggedListIndex!].context
                     .findRenderObject() as RenderBox;
@@ -427,7 +427,7 @@ class BoardViewState extends State<BoardView> with AutomaticKeepAliveClientMixin
             //scroll right
             if (boardViewController != null && boardViewController.hasClients) {
               boardViewController.animateTo(boardViewController.position.pixels + 5,
-                  duration: new Duration(milliseconds: 10), curve: Curves.ease);
+                  duration: Duration(milliseconds: 10), curve: Curves.ease);
               if(listStates[draggedListIndex!].mounted) {
                 RenderBox object = listStates[draggedListIndex!].context
                     .findRenderObject() as RenderBox;
@@ -453,7 +453,7 @@ class BoardViewState extends State<BoardView> with AutomaticKeepAliveClientMixin
               double pos = listStates[draggedListIndex!].boardListController.position.pixels;
               listStates[draggedListIndex!].boardListController.animateTo(
                   listStates[draggedListIndex!].boardListController.position.pixels - 5,
-                  duration: new Duration(milliseconds: 10),
+                  duration: Duration(milliseconds: 10),
                   curve: Curves.ease).whenComplete((){
 
                 pos -= listStates[draggedListIndex!].boardListController.position.pixels;
@@ -498,7 +498,7 @@ class BoardViewState extends State<BoardView> with AutomaticKeepAliveClientMixin
               double pos = listStates[draggedListIndex!].boardListController.position.pixels;
               listStates[draggedListIndex!].boardListController.animateTo(
                   listStates[draggedListIndex!].boardListController.position.pixels + 5,
-                  duration: new Duration(milliseconds: 10),
+                  duration: Duration(milliseconds: 10),
                   curve: Curves.ease).whenComplete((){
                 pos -= listStates[draggedListIndex!].boardListController.position.pixels;
                 if(initialY == null)
@@ -530,7 +530,7 @@ class BoardViewState extends State<BoardView> with AutomaticKeepAliveClientMixin
             //scroll left
             if (boardViewController != null && boardViewController.hasClients) {
               boardViewController.animateTo(boardViewController.position.pixels - 5,
-                  duration: new Duration(milliseconds: 10), curve: Curves.ease);
+                  duration: Duration(milliseconds: 10), curve: Curves.ease);
               if(leftListX != null){
                 leftListX = leftListX! + 5;
               }
@@ -544,7 +544,7 @@ class BoardViewState extends State<BoardView> with AutomaticKeepAliveClientMixin
             //scroll right
             if (boardViewController != null && boardViewController.hasClients) {
               boardViewController.animateTo(boardViewController.position.pixels + 5,
-                  duration: new Duration(milliseconds: 10), curve: Curves.ease);
+                  duration: Duration(milliseconds: 10), curve: Curves.ease);
               if(leftListX != null){
                 leftListX = leftListX! - 5;
               }
@@ -566,7 +566,7 @@ class BoardViewState extends State<BoardView> with AutomaticKeepAliveClientMixin
       if (widget.middleWidget != null) {
         stackWidgets.add(Container(key:_middleWidgetKey,child:widget.middleWidget));
       }
-      WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
         if(mounted){
           setState(() {});
         }
@@ -655,7 +655,7 @@ class BoardViewState extends State<BoardView> with AutomaticKeepAliveClientMixin
                 setState(() {});
               }
             },
-            child: new Stack(
+            child: Stack(
               children: stackWidgets,
             )));
   }

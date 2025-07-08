@@ -89,7 +89,7 @@ class BoardItemState extends State<BoardItem> with AutomaticKeepAliveClientMixin
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance!
+    WidgetsBinding.instance
         .addPostFrameCallback((_) => afterFirstLayout(context));
     if (widget.boardList!.itemStates.length > widget.index!) {
       widget.boardList!.itemStates.removeAt(widget.index!);

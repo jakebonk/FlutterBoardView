@@ -41,7 +41,7 @@ class BoardList extends StatefulWidget {
 
 class BoardListState extends State<BoardList> with AutomaticKeepAliveClientMixin{
   List<BoardItemState> itemStates = [];
-  ScrollController boardListController = new ScrollController();
+  ScrollController boardListController = ScrollController();
 
   void onDropList(int? listIndex) {
     if(widget.onDropList != null){
@@ -130,7 +130,7 @@ class BoardListState extends State<BoardList> with AutomaticKeepAliveClientMixin
                       widget.items![index].index != index ||
                       widget.items![index].boardList!.widget.index != widget.index ||
                       widget.items![index].boardList != this) {
-                    widget.items![index] = new BoardItem(
+                    widget.items![index] = BoardItem(
                       boardList: this,
                       item: widget.items![index].item,
                       draggable: widget.items![index].draggable,
