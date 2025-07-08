@@ -84,6 +84,12 @@ class BoardViewState extends State<BoardView> with AutomaticKeepAliveClientMixin
     }
   }
 
+  @override
+  void dispose() {
+    boardViewController.dispose();
+    super.dispose();
+  }
+
   void moveDown() {
     if(topItemY != null){
       topItemY = topItemY! + listStates[draggedListIndex!].itemStates[draggedItemIndex! + 1].height;
@@ -142,13 +148,26 @@ class BoardViewState extends State<BoardView> with AutomaticKeepAliveClientMixin
       boardViewController
           .animateTo(draggedListIndex! * widget.width, duration: Duration(milliseconds: 400), curve: Curves.ease)
           .whenComplete(() {
-        RenderBox object = listStates[tempListIndex!].context.findRenderObject() as RenderBox;
-        Offset pos = object.localToGlobal(Offset.zero);
-        leftListX = pos.dx;
-        rightListX = pos.dx + object.size.width;
-        Future.delayed(Duration(milliseconds: widget.dragDelay), () {
-          canDrag = true;
-        });
+        if (mounted && tempListIndex != null && 
+            tempListIndex < listStates.length && 
+            listStates[tempListIndex].mounted && 
+            listStates[tempListIndex].context != null) {
+          try {
+            RenderBox object = listStates[tempListIndex].context.findRenderObject() as RenderBox;
+            Offset pos = object.localToGlobal(Offset.zero);
+            leftListX = pos.dx;
+            rightListX = pos.dx + object.size.width;
+          } catch (e) {
+            print("Error accessing list state context: $e");
+          }
+        }
+        if (mounted) {
+          Future.delayed(Duration(milliseconds: widget.dragDelay), () {
+            if (mounted) {
+              canDrag = true;
+            }
+          });
+        }
       });
     }
     if(mounted){
@@ -193,17 +212,40 @@ class BoardViewState extends State<BoardView> with AutomaticKeepAliveClientMixin
       boardViewController
           .animateTo(draggedListIndex! * widget.width, duration: Duration(milliseconds: 400), curve: Curves.ease)
           .whenComplete(() {
-        RenderBox object = listStates[tempListIndex!].context.findRenderObject() as RenderBox;
-        Offset pos = object.localToGlobal(Offset.zero);
-        leftListX = pos.dx;
-        rightListX = pos.dx + object.size.width;
-        RenderBox box = listStates[tempListIndex].itemStates[tempItemIndex!].context.findRenderObject() as RenderBox;
-        Offset itemPos = box.localToGlobal(Offset.zero);
-        topItemY = itemPos.dy;
-        bottomItemY = itemPos.dy + box.size.height;
-        Future.delayed(Duration(milliseconds: widget.dragDelay), () {
-          canDrag = true;
-        });
+        if (mounted && tempListIndex != null && 
+            tempListIndex < listStates.length && 
+            listStates[tempListIndex].mounted && 
+            listStates[tempListIndex].context != null) {
+          try {
+            RenderBox object = listStates[tempListIndex].context.findRenderObject() as RenderBox;
+            Offset pos = object.localToGlobal(Offset.zero);
+            leftListX = pos.dx;
+            rightListX = pos.dx + object.size.width;
+          } catch (e) {
+            print("Error accessing list state context: $e");
+          }
+        }
+        if (mounted && tempListIndex != null && tempItemIndex != null &&
+            tempListIndex < listStates.length && 
+            tempItemIndex < listStates[tempListIndex].itemStates.length &&
+            listStates[tempListIndex].itemStates[tempItemIndex].mounted &&
+            listStates[tempListIndex].itemStates[tempItemIndex].context != null) {
+          try {
+            RenderBox box = listStates[tempListIndex].itemStates[tempItemIndex].context.findRenderObject() as RenderBox;
+            Offset itemPos = box.localToGlobal(Offset.zero);
+            topItemY = itemPos.dy;
+            bottomItemY = itemPos.dy + box.size.height;
+          } catch (e) {
+            print("Error accessing item state context: $e");
+          }
+        }
+        if (mounted) {
+          Future.delayed(Duration(milliseconds: widget.dragDelay), () {
+            if (mounted) {
+              canDrag = true;
+            }
+          });
+        }
       });
     }
     if(mounted){
@@ -227,13 +269,26 @@ class BoardViewState extends State<BoardView> with AutomaticKeepAliveClientMixin
       boardViewController
           .animateTo(draggedListIndex! * widget.width, duration: Duration(milliseconds: widget.dragDelay), curve: Curves.ease)
           .whenComplete(() {
-        RenderBox object = listStates[tempListIndex!].context.findRenderObject() as RenderBox;
-        Offset pos = object.localToGlobal(Offset.zero);
-        leftListX = pos.dx;
-        rightListX = pos.dx + object.size.width;
-        Future.delayed(Duration(milliseconds: widget.dragDelay), () {
-          canDrag = true;
-        });
+        if (mounted && tempListIndex != null && 
+            tempListIndex < listStates.length && 
+            listStates[tempListIndex].mounted && 
+            listStates[tempListIndex].context != null) {
+          try {
+            RenderBox object = listStates[tempListIndex].context.findRenderObject() as RenderBox;
+            Offset pos = object.localToGlobal(Offset.zero);
+            leftListX = pos.dx;
+            rightListX = pos.dx + object.size.width;
+          } catch (e) {
+            print("Error accessing list state context: $e");
+          }
+        }
+        if (mounted) {
+          Future.delayed(Duration(milliseconds: widget.dragDelay), () {
+            if (mounted) {
+              canDrag = true;
+            }
+          });
+        }
       });
     }
     if(mounted) {
@@ -278,17 +333,40 @@ class BoardViewState extends State<BoardView> with AutomaticKeepAliveClientMixin
       boardViewController
           .animateTo(draggedListIndex! * widget.width, duration: Duration(milliseconds: 400), curve: Curves.ease)
           .whenComplete(() {
-        RenderBox object = listStates[tempListIndex!].context.findRenderObject() as RenderBox;
-        Offset pos = object.localToGlobal(Offset.zero);
-        leftListX = pos.dx;
-        rightListX = pos.dx + object.size.width;
-        RenderBox box = listStates[tempListIndex].itemStates[tempItemIndex!].context.findRenderObject() as RenderBox;
-        Offset itemPos = box.localToGlobal(Offset.zero);
-        topItemY = itemPos.dy;
-        bottomItemY = itemPos.dy + box.size.height;
-        Future.delayed(Duration(milliseconds: widget.dragDelay), () {
-          canDrag = true;
-        });
+        if (mounted && tempListIndex != null && 
+            tempListIndex < listStates.length && 
+            listStates[tempListIndex].mounted && 
+            listStates[tempListIndex].context != null) {
+          try {
+            RenderBox object = listStates[tempListIndex].context.findRenderObject() as RenderBox;
+            Offset pos = object.localToGlobal(Offset.zero);
+            leftListX = pos.dx;
+            rightListX = pos.dx + object.size.width;
+          } catch (e) {
+            print("Error accessing list state context: $e");
+          }
+        }
+        if (mounted && tempListIndex != null && tempItemIndex != null &&
+            tempListIndex < listStates.length && 
+            tempItemIndex < listStates[tempListIndex].itemStates.length &&
+            listStates[tempListIndex].itemStates[tempItemIndex].mounted &&
+            listStates[tempListIndex].itemStates[tempItemIndex].context != null) {
+          try {
+            RenderBox box = listStates[tempListIndex].itemStates[tempItemIndex].context.findRenderObject() as RenderBox;
+            Offset itemPos = box.localToGlobal(Offset.zero);
+            topItemY = itemPos.dy;
+            bottomItemY = itemPos.dy + box.size.height;
+          } catch (e) {
+            print("Error accessing item state context: $e");
+          }
+        }
+        if (mounted) {
+          Future.delayed(Duration(milliseconds: widget.dragDelay), () {
+            if (mounted) {
+              canDrag = true;
+            }
+          });
+        }
       });
     }
     if(mounted) {
@@ -456,21 +534,28 @@ class BoardViewState extends State<BoardView> with AutomaticKeepAliveClientMixin
                   duration: Duration(milliseconds: 10),
                   curve: Curves.ease).whenComplete((){
 
-                pos -= listStates[draggedListIndex!].boardListController.position.pixels;
-                if(initialY == null)
-                  initialY = 0;
+                if (mounted && draggedListIndex != null && 
+                    draggedListIndex! < listStates.length &&
+                    listStates[draggedListIndex!].boardListController != null &&
+                    listStates[draggedListIndex!].boardListController.hasClients) {
+                  pos -= listStates[draggedListIndex!].boardListController.position.pixels;
+                  if(initialY == null)
+                    initialY = 0;
 //                if(widget.boardViewController != null) {
 //                  initialY -= pos;
 //                }
-                isScrolling = false;
-                if(topItemY != null) {
-                  topItemY = topItemY! + pos;
-                }
-                if(bottomItemY != null) {
-                  bottomItemY = bottomItemY! + pos;
-                }
-                if(mounted){
-                  setState(() { });
+                  isScrolling = false;
+                  if(topItemY != null) {
+                    topItemY = topItemY! + pos;
+                  }
+                  if(bottomItemY != null) {
+                    bottomItemY = bottomItemY! + pos;
+                  }
+                  if(mounted){
+                    setState(() { });
+                  }
+                } else {
+                  isScrolling = false;
                 }
               });
             }
@@ -500,21 +585,28 @@ class BoardViewState extends State<BoardView> with AutomaticKeepAliveClientMixin
                   listStates[draggedListIndex!].boardListController.position.pixels + 5,
                   duration: Duration(milliseconds: 10),
                   curve: Curves.ease).whenComplete((){
-                pos -= listStates[draggedListIndex!].boardListController.position.pixels;
-                if(initialY == null)
-                  initialY = 0;
+                if (mounted && draggedListIndex != null && 
+                    draggedListIndex! < listStates.length &&
+                    listStates[draggedListIndex!].boardListController != null &&
+                    listStates[draggedListIndex!].boardListController.hasClients) {
+                  pos -= listStates[draggedListIndex!].boardListController.position.pixels;
+                  if(initialY == null)
+                    initialY = 0;
 //                if(widget.boardViewController != null) {
 //                  initialY -= pos;
 //                }
-                isScrolling = false;
-                if(topItemY != null) {
-                  topItemY = topItemY! + pos;
-                }
-                if(bottomItemY != null) {
-                  bottomItemY = bottomItemY! + pos;
-                }
-                if(mounted){
-                  setState(() {});
+                  isScrolling = false;
+                  if(topItemY != null) {
+                    topItemY = topItemY! + pos;
+                  }
+                  if(bottomItemY != null) {
+                    bottomItemY = bottomItemY! + pos;
+                  }
+                  if(mounted){
+                    setState(() {});
+                  }
+                } else {
+                  isScrolling = false;
                 }
               });
             }

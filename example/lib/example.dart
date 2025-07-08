@@ -7,14 +7,28 @@ import 'package:boardview/boardview.dart';
 import 'BoardItemObject.dart';
 import 'BoardListObject.dart';
 
-class BoardViewExample extends StatelessWidget {
+class BoardViewExample extends StatefulWidget {
+  @override
+  _BoardViewExampleState createState() => _BoardViewExampleState();
+}
 
-
-
+class _BoardViewExampleState extends State<BoardViewExample> {
   List<BoardListObject> _listData = [
-    BoardListObject(title: "List title 1"),
-    BoardListObject(title: "List title 2"),
-    BoardListObject(title: "List title 3")
+    BoardListObject(title: "To Do", items: [
+      BoardItemObject(title: "Task 1"),
+      BoardItemObject(title: "Task 2"),
+      BoardItemObject(title: "Task 3"),
+    ]),
+    BoardListObject(title: "In Progress", items: [
+      BoardItemObject(title: "Task 4"),
+      BoardItemObject(title: "Task 5"),
+    ]),
+    BoardListObject(title: "Done", items: [
+      BoardItemObject(title: "Task 6"),
+      BoardItemObject(title: "Task 7"),
+      BoardItemObject(title: "Task 8"),
+      BoardItemObject(title: "Task 9"),
+    ])
   ];
 
 
@@ -29,9 +43,14 @@ class BoardViewExample extends StatelessWidget {
     for (int i = 0; i < _listData.length; i++) {
       _lists.add(_createBoardList(_listData[i]) as BoardList);
     }
-    return BoardView(
-      lists: _lists,
-      boardViewController: boardViewController,
+    return Container(
+      color: Colors.grey[100],
+      child: BoardView(
+        lists: _lists,
+        boardViewController: boardViewController,
+        width: 300,
+        scrollbar: true,
+      ),
     );
   }
 
@@ -44,16 +63,25 @@ class BoardViewExample extends StatelessWidget {
             int? oldItemIndex, BoardItemState? state) {
           //Used to update our local item data
           var item = _listData[oldListIndex!].items![oldItemIndex!];
-          _listData[oldListIndex].items!.removeAt(oldItemIndex!);
+          _listData[oldListIndex].items!.removeAt(oldItemIndex);
           _listData[listIndex!].items!.insert(itemIndex!, item);
+          setState(() {}); // Update the UI
         },
         onTapItem: (int? listIndex, int? itemIndex, BoardItemState? state) async {
 
         },
         item: Card(
+          elevation: 2,
+          margin: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(itemObject.title!),
+            padding: const EdgeInsets.all(12.0),
+            child: Text(
+              itemObject.title!,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
           ),
         ));
   }
@@ -74,18 +102,23 @@ class BoardViewExample extends StatelessWidget {
       onDropList: (int? listIndex, int? oldListIndex) {
         //Update our local list data
         var list = _listData[oldListIndex!];
-        _listData.removeAt(oldListIndex!);
+        _listData.removeAt(oldListIndex);
         _listData.insert(listIndex!, list);
+        setState(() {}); // Update the UI
       },
-      headerBackgroundColor: Color.fromARGB(255, 235, 236, 240),
-      backgroundColor: Color.fromARGB(255, 235, 236, 240),
+      headerBackgroundColor: Colors.blue[100],
+      backgroundColor: Colors.grey[50],
       header: [
         Expanded(
             child: Padding(
                 padding: EdgeInsets.all(5),
                 child: Text(
                   list.title!,
-                  style: TextStyle(fontSize: 20),
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.blue[800],
+                  ),
                 ))),
       ],
       items: items,
